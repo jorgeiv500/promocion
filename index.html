@@ -270,7 +270,189 @@
 					<h3>CARRERAS EN TECNOLOGIA</h3>
 					<div class="tweet" data-src="https://twitter.com/GorritiMikel/status/1351568090585247749"></div>
 				</section>
+				<section data-auto-animate>
+					<h2 data-id="code-title">Simulando un sistema de inventario simple en Python</h2>
+					<pre data-id="code-animation"><code class="hljs" data-trim data-line-numbers="1|2-4|5-8|9-10|11-14|15-20"><script type="text/template">
+						class almacen:
+						def __init__(self, nivel_inventario):
+						  self.i = nivel_inventario
+						  self.revisa_inventario(0)
+						def orden(self, Q, tiempo):
+						  self.revisa_inventario(tiempo)
+						  self.i += Q
+						  self.revisa_inventario(tiempo) # las ordenes son recibidas al iniciar cada periodo
+						def disponible(self):
+						  return max(0, self.i)
+						def emision(self, demanda, tiempo):
+						  self.revisa_inventario(tiempo)
+						  self.i = self.i-demanda
+						  self.revisa_inventario(tiempo+1) # la demanda se realiza al final de un período
+						def revisa_inventario(self, tiempo):
+						  try:
+							self.niveles.append([tiempo, self.i])
+							self.en_mano.append([tiempo, self.disponible()])
+						  except AttributeError:
+							self.niveles, self.en_mano = [[0, self.i]], [[0, self.disponible()]]
+					</script></code></pre>
+					
+				</section>
+				<section data-auto-animate>
+					<h2 data-id="code-title">Funcion para graficar</h2>
+					<pre data-id="code-animation"><code class="hljs" data-trim data-line-numbers="1-3|4-10"><script type="text/template">
+							import matplotlib.pyplot as plt
+							import numpy as np
+							import pandas as pd
+							def grafica_inventario(valores, etiqueta):
+							df=pd.DataFrame({'x':np.array(valores)[:,0], 'fx':np.array(valores)[:,1]})
+							# grafique
+							plt.xticks(range(len(valores)),range(1,len(valores)+1))
+							plt.xlabel("$t$")
+							plt.ylabel("items")
+							plt.plot( 'x', 'fx', data=df,linestyle='-', marker='o',label=etiqueta)
+					</script></code></pre>
+					
+				</section>
 
+				<section data-auto-animate >
+					<h2> Ejemplo 📚 </h2>
+					<span style="text-align: justify" class="fragment fade-left">
+			
+						</span>
+
+									  
+					  </justify></small></p>
+					  <pre data-id="code-animation"><code class="hljs" data-trim data-line-numbers="1-4|5-10"><script type="text/template">
+  
+					  inventario_inicial = 100
+					  w = almacen(inventario_inicial)
+					  demanda = 5 # tasa de demanda del cliente para un periodo
+					  N = 20 # horizonte de planeacion
+					  for t in range(N):
+						w.emision(demanda, t)
+					  grafica_inventario(w.niveles, "nivel de inventario")
+					  plt.legend()
+					  plt.show()
+						</script></code></pre>
+						<img src="https://github.com/jorgeiv500/Logistica/blob/master/descarga.png?raw=true" alt="reveal.js logo" style="height: 300px; margin: 0 auto 4rem auto; background: transparent;" class="demo-logo">
+					
+				
+				</section>
+				<section>
+					<h2>FORMULACION - JUGADOR A</h2> 
+
+						\begin{array}
+						\operatorname{Maximizar} z=v
+						\end{array}
+
+
+						Sujeto a 
+
+
+						\[\begin{aligned}
+						v-3 x_{1}+2 x_{2}+5 x_{3} \leq 0\\
+						v+x_{1}-4 x_{2}+6 x_{3} \leq 0\\
+						v+3 x_{1}+x_{2}-2 x_{3} \leq 0\\
+						x_{1}+x_{2}+x_{3}=1\\
+						x_{1}, x_{2}, x_{3} \geq 0\\
+						v \ \ irrestricta
+						\end{aligned} \]
+				</section>
+
+				<section data-auto-animate>
+							<h2 data-id="code-title">En Google OR:</h2>
+							<pre data-id="code-animation"><code class="hljs" data-trim data-line-numbers>
+									from ortools.linear_solver import pywraplp
+
+									def jugadorA():
+									"""Juegos-jugador1."""
+									# Agregar el solver CBC al problema
+									solver = pywraplp.Solver.CreateSolver('CBC')
+									# Crear las VARIABLES.
+									v = solver.NumVar(-solver.infinity(), solver.infinity(), 'v')
+									x1 = solver.NumVar(0, solver.infinity(), 'x1')
+									x2 = solver.NumVar(0, solver.infinity(), 'x2')
+									x3 = solver.NumVar(0, solver.infinity(), 'x3')
+									print('Numero de variables =', solver.NumVariables())
+									# Constraint 0: 
+									solver.Add(v - 3*x1+2*x2+5*x3 <= 0.0)
+									# Constraint 1: 
+									solver.Add(v + x1 - 4*x2+6*x3 <= 0.0)
+									# Constraint 2:
+									solver.Add(v+3*x1 + x2-2*x3 <= 0.0)
+									# Constraint 3:
+									solver.Add(x1+x2+x3 == 1.0)
+									print('Numero de restricciones =', solver.NumConstraints())
+									# Funcion objetivo: 
+									solver.Maximize(v)
+									# resolvemos el problema.
+									status = solver.Solve()
+
+									if status == pywraplp.Solver.OPTIMAL:
+										print('Solucion:')
+										print('Z =', solver.Objective().Value())
+										print('x1 =', x1.solution_value())
+										print('x2 =', x2.solution_value())
+										print('x3 =', x3.solution_value())
+										print('V =', v.solution_value())
+									else:
+										print('Grave!, el problema no tiene solucion, reviselo!.')
+
+									print('\nAvanzado:')
+									print('Problem solved in %f milliseconds' % solver.wall_time())
+									print('Problem solved in %d iterations' % solver.iterations())
+
+									jugadorA()
+							</code></pre>
+							
+				</section>
+					<section data-auto-animate>
+							<h2 data-id="code-title">EN GOOGLE OR</h2>
+							<pre data-id="code-animation"><code class="hljs" data-trim data-line-numbers="1,3|6|8-11|13-20|23|25|27-35|41"><script type="text/template">
+								from ortools.linear_solver import pywraplp
+
+								def jugadorA():
+									"""Juegos-jugador1."""
+									# Agregar el solver CBC al problema
+									solver = pywraplp.Solver.CreateSolver('CBC')
+									# Crear las VARIABLES.
+									v = solver.NumVar(-solver.infinity(), solver.infinity(), 'v')
+									x1 = solver.NumVar(0, solver.infinity(), 'x1')
+									x2 = solver.NumVar(0, solver.infinity(), 'x2')
+									x3 = solver.NumVar(0, solver.infinity(), 'x3')
+									print('Numero de variables =', solver.NumVariables())
+									# Constraint 0: 
+									solver.Add(v - 3*x1+2*x2+5*x3 <= 0.0)
+									# Constraint 1: 
+									solver.Add(v + x1 - 4*x2+6*x3 <= 0.0)
+									# Constraint 2:
+									solver.Add(v+3*x1 + x2-2*x3 <= 0.0)
+									# Constraint 3:
+									solver.Add(x1+x2+x3 == 1.0)
+									print('Numero de restricciones =', solver.NumConstraints())
+									# Funcion objetivo: 
+									solver.Maximize(v)
+									# resolvemos el problema.
+									status = solver.Solve()
+								
+									if status == pywraplp.Solver.OPTIMAL:
+										print('Solucion:')
+										print('Z =', solver.Objective().Value())
+										print('x1 =', x1.solution_value())
+										print('x2 =', x2.solution_value())
+										print('x3 =', x3.solution_value())
+										print('V =', v.solution_value())
+									else:
+										print('Grave!, el problema no tiene solucion, reviselo!.')
+								
+									print('\nAvanzado:')
+									print('Problem solved in %f milliseconds' % solver.wall_time())
+									print('Problem solved in %d iterations' % solver.iterations())
+								
+								jugadorA()
+							</script></code></pre>
+					</section>
+					
+			
 				<section data-transition="zoom">
 					<h3>NOTAS DIVERTIDAS EN INGENIERIA</h3>
  					<div class="tweet" data-src="https://twitter.com/IntEngineering/status/1442141922391302151"></div>
