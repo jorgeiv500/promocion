@@ -1,6 +1,13 @@
 const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
 const MODEL = process.env.OPENAI_PROMPT_RATER_MODEL || 'gpt-4.1-mini';
 
+function sendJson(res, statusCode, payload) {
+  res.statusCode = statusCode;
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Cache-Control', 'no-store');
+  res.end(JSON.stringify(payload));
+}
+
 function parseBody(body) {
   if (!body) return {};
   if (typeof body === 'string') {
@@ -15,45 +22,74 @@ function parseBody(body) {
 
 function extractJson(text) {
   const trimmed = String(text || '').trim();
+
+  if (!trimmed) {
+    throw new Error('OpenAI no devolvió contenido para evaluar.');
+  }
+
   try {
     return JSON.parse(trimmed);
   } catch {}
 
+  const fenced = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fenced?.[1]) {
+    return JSON.parse(fenced[1].trim());
+  }
+
   const match = trimmed.match(/\{[\s\S]*\}/);
   if (!match) {
-    throw new Error('La respuesta del modelo no llegó en JSON.');
+    throw new Error('La respuesta del modelo no llegó en JSON válido.');
   }
+
   return JSON.parse(match[0]);
 }
 
+async function parseOpenAIResponse(apiResponse) {
+  const raw = await apiResponse.text();
+
+  if (!raw || !raw.trim()) {
+    throw new Error('El servicio respondió vacío.');
+  }
+
+  try {
+    return JSON.parse(raw);
+  } catch {
+    const excerpt = raw.trim().slice(0, 220);
+    throw new Error(`OpenAI devolvió una respuesta no JSON: ${excerpt}`);
+  }
+}
+
 module.exports = async (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
+  if (req.method === 'GET') {
+    return sendJson(res, 200, {
+      ok: true,
+      service: 'prompt-rater',
+      has_key: Boolean(process.env.OPENAI_API_KEY),
+      model: MODEL,
+    });
+  }
 
   if (req.method !== 'POST') {
-    res.statusCode = 405;
-    res.end(JSON.stringify({ error: 'Método no permitido.' }));
-    return;
+    return sendJson(res, 405, { error: 'Método no permitido.' });
   }
 
   if (!process.env.OPENAI_API_KEY) {
-    res.statusCode = 500;
-    res.end(JSON.stringify({ error: 'Falta OPENAI_API_KEY en el entorno del servidor.' }));
-    return;
+    return sendJson(res, 500, {
+      error: 'Falta OPENAI_API_KEY en el entorno del servidor.',
+    });
   }
 
   const body = parseBody(req.body);
   const prompt = typeof body.prompt === 'string' ? body.prompt.trim() : '';
 
   if (!prompt) {
-    res.statusCode = 400;
-    res.end(JSON.stringify({ error: 'Debes enviar un prompt para evaluar.' }));
-    return;
+    return sendJson(res, 400, { error: 'Debes enviar un prompt para evaluar.' });
   }
 
   if (prompt.length > 8000) {
-    res.statusCode = 400;
-    res.end(JSON.stringify({ error: 'El prompt es demasiado largo para este evaluador.' }));
-    return;
+    return sendJson(res, 400, {
+      error: 'El prompt es demasiado largo para este evaluador.',
+    });
   }
 
   const systemPrompt = `
@@ -105,38 +141,31 @@ Reglas adicionales:
       }),
     });
 
-    const data = await apiResponse.json();
+    const data = await parseOpenAIResponse(apiResponse);
 
     if (!apiResponse.ok) {
       const message =
         data?.error?.message ||
+        data?.message ||
         'OpenAI no pudo procesar la evaluación del prompt.';
-      res.statusCode = apiResponse.status;
-      res.end(JSON.stringify({ error: message }));
-      return;
+      return sendJson(res, apiResponse.status, { error: message });
     }
 
     const content = data?.choices?.[0]?.message?.content;
     const parsed = extractJson(content);
 
-    res.statusCode = 200;
-    res.end(
-      JSON.stringify({
-        score: parsed.score,
-        verdict: parsed.verdict,
-        summary: parsed.summary,
-        strengths: Array.isArray(parsed.strengths) ? parsed.strengths : [],
-        missing: Array.isArray(parsed.missing) ? parsed.missing : [],
-        suggestions: Array.isArray(parsed.suggestions) ? parsed.suggestions : [],
-        improved_prompt: parsed.improved_prompt || '',
-      })
-    );
+    return sendJson(res, 200, {
+      score: parsed.score,
+      verdict: parsed.verdict,
+      summary: parsed.summary,
+      strengths: Array.isArray(parsed.strengths) ? parsed.strengths : [],
+      missing: Array.isArray(parsed.missing) ? parsed.missing : [],
+      suggestions: Array.isArray(parsed.suggestions) ? parsed.suggestions : [],
+      improved_prompt: parsed.improved_prompt || '',
+    });
   } catch (error) {
-    res.statusCode = 500;
-    res.end(
-      JSON.stringify({
-        error: error?.message || 'Error inesperado al calificar el prompt.',
-      })
-    );
+    return sendJson(res, 500, {
+      error: error?.message || 'Error inesperado al calificar el prompt.',
+    });
   }
 };

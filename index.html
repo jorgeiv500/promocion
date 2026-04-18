@@ -657,6 +657,10 @@
 			  font-size: 0.44em;
 			}
 
+			.prompt-rater-status:empty {
+			  display: none;
+			}
+
 			.prompt-rater-placeholder {
 			  color: var(--ink-soft);
 			  font-size: 0.52em;
@@ -711,6 +715,36 @@
 			  border: 1px solid rgba(255,255,255,0.08);
 			  border-radius: 12px;
 			  padding: 12px;
+			}
+
+			.reveal .slides section.prompt-rater-slide {
+			  display: flex;
+			  flex-direction: column;
+			  justify-content: center;
+			  min-height: calc(100vh - 120px);
+			  padding-bottom: 22px;
+			}
+
+			.prompt-rater-slide .section-title,
+			.prompt-rater-slide .section-lead,
+			.prompt-rater-slide .prompt-rater,
+			.prompt-rater-slide .prompt-source {
+			  width: min(1120px, 92vw);
+			  margin-left: auto;
+			  margin-right: auto;
+			}
+
+			.prompt-rater-slide .section-title {
+			  margin-top: 0;
+			}
+
+			.prompt-rater-slide .section-lead {
+			  max-width: 980px;
+			}
+
+			.prompt-source {
+			  margin-top: 14px;
+			  font-size: 0.42em;
 			}
 
 			.section-title {
@@ -1936,8 +1970,8 @@
 					</p>
 				</section>
 
-				<section data-transition="zoom" data-background="#082f6b">
-					<h2 class="section-title"><span class="title-icon"><i class="fas fa-clipboard-check"></i></span>Calificador de prompts</h2>
+				<section class="centered-slide prompt-rater-slide" data-transition="zoom" data-background="#082f6b">
+					<h2 class="section-title"><span class="title-icon"><i class="fas fa-clipboard-check"></i></span>Mini laboratorio: califica tu prompt</h2>
 					<p class="section-lead">Este minilab evalúa tu prompt solo con base en las reglas del artículo de OpenAI: claridad, contexto, formato, ejemplos e iteración. No es un chat general; está limitado a revisar prompts.</p>
 					<div class="prompt-rater">
 						<div class="prompt-rater-form">
@@ -1948,14 +1982,14 @@
 									<i class="fas fa-star-half-alt"></i>
 									<span>Calificar</span>
 								</button>
-								<span class="prompt-rater-status" id="prompt-rater-status">Usa tu API key en Vercel con la variable <code>OPENAI_API_KEY</code>.</span>
+								<span class="prompt-rater-status" id="prompt-rater-status"></span>
 							</div>
 						</div>
 						<div class="prompt-rater-result" id="prompt-rater-result">
 							<p class="prompt-rater-placeholder">Aquí aparecerán la calificación, lo que ya hace bien el prompt y lo que le falta según la guía oficial de OpenAI.</p>
 						</div>
 					</div>
-					<p class="section-lead" style="margin-top: 16px; font-size: 0.42em;">
+					<p class="section-lead prompt-source">
 						Base de evaluación: OpenAI, <a href="https://platform.openai.com/docs/guides/prompting">Prompting</a> y <a href="https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering">Best practices for prompt engineering with the OpenAI API</a>.
 					</p>
 				</section>
@@ -2213,6 +2247,21 @@
 				`;
 			}
 
+			async function parseJsonResponse(response) {
+				const raw = await response.text();
+
+				if (!raw || !raw.trim()) {
+					throw new Error('El servidor respondió vacío. Revisa el despliegue de la función.');
+				}
+
+				try {
+					return JSON.parse(raw);
+				} catch {
+					const excerpt = raw.trim().slice(0, 180);
+					throw new Error(`La función devolvió una respuesta inválida: ${excerpt}`);
+				}
+			}
+
 			if (promptRaterSubmit && promptRaterInput && promptRaterResult && promptRaterStatus) {
 				promptRaterSubmit.addEventListener('click', async () => {
 					const promptText = promptRaterInput.value.trim();
@@ -2233,7 +2282,7 @@
 							body: JSON.stringify({ prompt: promptText })
 						});
 
-						const data = await response.json();
+						const data = await parseJsonResponse(response);
 
 						if (!response.ok) {
 							throw new Error(data.error || 'No se pudo calificar el prompt.');
@@ -2243,7 +2292,7 @@
 						promptRaterStatus.textContent = 'Listo. La evaluación se basó solo en las reglas de prompting seleccionadas.';
 					} catch (error) {
 						promptRaterStatus.textContent = error.message || 'No se pudo completar la evaluación.';
-						promptRaterResult.innerHTML = '<p class="prompt-rater-placeholder">No se pudo obtener una evaluación. Verifica que la variable OPENAI_API_KEY exista en Vercel.</p>';
+						promptRaterResult.innerHTML = '<p class="prompt-rater-placeholder">No se pudo obtener una evaluación. El mensaje real del error aparece debajo del botón para ayudarte a diagnosticar la función.</p>';
 					} finally {
 						promptRaterSubmit.disabled = false;
 					}
