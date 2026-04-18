@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "api/score-prompt.js": {
+      "runtime": "nodejs20.x"
+    }
+  },
   "cleanUrls": true,
   "trailingSlash": false
 }
