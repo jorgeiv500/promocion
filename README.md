@@ -1,28 +1,46 @@
-<p align="center">
-  <a href="https://revealjs.com">
-  <img src="https://hakim-static.s3.amazonaws.com/reveal-js/logo/v1/reveal-black-text.svg" alt="reveal.js" width="450">
-  </a>
-  <br><br>
-  <a href="https://github.com/hakimel/reveal.js/actions"><img src="https://github.com/hakimel/reveal.js/workflows/tests/badge.svg"></a>
-  <a href="https://slides.com/"><img src="https://s3.amazonaws.com/static.slid.es/images/slides-github-banner-320x40.png?1" alt="Slides" width="160" height="20"></a>
-</p>
+# Taller Ruta 4-22
 
-reveal.js is an open source HTML presentation framework. It enables anyone with a web browser to create fully featured and beautiful presentations for free. [Check out the live demo](https://revealjs.com/).
+Presentación estática basada en `reveal.js`, lista para publicarse en GitHub y desplegarse en Vercel.
 
-The framework comes with a broad range of features including [nested slides](https://revealjs.com/vertical-slides/), [Markdown support](https://revealjs.com/markdown/), [Auto-Animate](https://revealjs.com/auto-animate/), [PDF export](https://revealjs.com/pdf-export/), [speaker notes](https://revealjs.com/speaker-view/), [LaTeX support](https://revealjs.com/math/), [syntax highlighted code](https://revealjs.com/code/) and much more.
+## Estructura
 
-<h1>
-  <a href="https://revealjs.com/installation" style="font-size: 3em;">Get Started</a>
-</h1>
+- `index.html`: presentación principal
+- `domo-ai-edition-2025.avif`: infografía Domo
+- `70años-fondososcuros.png`: identidad visual Utadeo
+- `malla_ingenieria_de_sistemas-20231004 (1).pdf`
+- `malla_ingenieria_industrial-20231004 (1).pdf`
+- `dist/`: runtime mínimo de Reveal usado por la presentación
+- `plugin/chalkboard/`: plugin de anotación
+- `plugin/customcontrols/`: navegación personalizada
+- `plugin/embed-tweet/`: embeds de tweets
+- `vercel.json`: configuración mínima de despliegue
 
-## Documentation
-The full reveal.js documentation is available at [revealjs.com](https://revealjs.com).
+## Deploy en Vercel
 
-## Online Editor
-Want to create your presentation using a visual editor? Try the official reveal.js presentation platform for free at [Slides.com](https://slides.com). It's made by the same people behind reveal.js.
+1. Sube este repositorio a GitHub.
+2. En Vercel, crea un proyecto nuevo e importa el repositorio.
+3. Framework Preset: `Other`.
+4. Build Command: vacío.
+5. Output Directory: vacío.
+6. Agrega la variable de entorno `OPENAI_API_KEY` si quieres activar el calificador de prompts.
+7. Opcional: agrega `OPENAI_PROMPT_RATER_MODEL` para cambiar el modelo.
+8. Deploy.
 
-## License
+Vercel servirá `index.html` como sitio estático sin build.
 
-MIT licensed
+## Variables de entorno
 
-Copyright (C) 2011-2021 Hakim El Hattab, https://hakim.se
+Hay un archivo de ejemplo en `.env.example`.
+
+Para desarrollo local puedes crear:
+
+```bash
+cp .env.example .env.local
+```
+
+Luego reemplaza:
+
+- `OPENAI_API_KEY` por tu API key real
+- `OPENAI_PROMPT_RATER_MODEL` si quieres otro modelo para el evaluador
+
+El archivo `.env.local` no debe subirse al repositorio.

@@ -4,14 +4,1495 @@
 
 	<head>
 		<style>
-			.colorText {
-			  color: #a12604;  /* Aquí puedes poner el color que quieras */
+			:root {
+			  --blue-950: #061c3d;
+			  --blue-900: #082f6b;
+			  --blue-800: #0a4b9c;
+			  --blue-700: #1463c4;
+			  --blue-500: #4ea1ff;
+			  --blue-300: #b9dcff;
+			  --blue-100: #eaf4ff;
+			  --utadeo-yellow: #f2c24f;
+			  --ink-soft: rgba(255, 255, 255, 0.78);
 			}
-		  </style>
+
+			.colorText {
+			  color: var(--blue-500);
+			}
+
+			.reveal {
+			  font-size: 31px;
+			}
+
+			.reveal h1,
+			.reveal h2,
+			.reveal h3 {
+			  text-transform: none;
+			  letter-spacing: -0.02em;
+			}
+
+			.reveal p,
+			.reveal li,
+			.reveal small {
+			  color: #ffffff;
+			}
+
+			.reveal .slides section {
+			  text-align: left;
+			  box-sizing: border-box;
+			  padding-top: 42px;
+			}
+
+			.reveal .slides section.centered-slide {
+			  text-align: center;
+			}
+
+			.dna-background {
+			  position: fixed;
+			  inset: 0;
+			  overflow: hidden;
+			  pointer-events: none;
+			  z-index: 6;
+			  opacity: 0.42;
+			}
+
+			.dna-helix {
+			  position: absolute;
+			  top: 50%;
+			  width: 340px;
+			  height: 120vh;
+			  transform: translateY(-50%);
+			  filter: blur(0.8px);
+			  perspective: 900px;
+			  transform-style: preserve-3d;
+			}
+
+			.dna-helix.left {
+			  left: -40px;
+			}
+
+			.dna-helix.right {
+			  right: -40px;
+			  transform: translateY(-50%) scaleX(-1);
+			}
+
+			.dna-rung {
+			  position: absolute;
+			  left: 50%;
+			  width: 140px;
+			  height: 22px;
+			  transform: translateX(-50%) translateX(var(--shift, 0px)) scaleY(var(--scale, 1));
+			  transform-style: preserve-3d;
+			  animation: dnaSpin 6.8s linear infinite;
+			  will-change: transform, opacity;
+			}
+
+			.dna-rung::before,
+			.dna-rung::after {
+			  content: '';
+			  position: absolute;
+			  top: 50%;
+			  width: 12px;
+			  height: 12px;
+			  margin-top: -6px;
+			  border-radius: 50%;
+			  background: rgba(185, 220, 255, 0.68);
+			  box-shadow: 0 0 18px rgba(78, 161, 255, 0.3);
+			  transform: translateZ(18px);
+			}
+
+			.dna-rung::before {
+			  left: 0;
+			}
+
+			.dna-rung::after {
+			  right: 0;
+			}
+
+			.dna-link {
+			  position: absolute;
+			  top: 50%;
+			  left: 16px;
+			  right: 16px;
+			  height: 1.5px;
+			  margin-top: -0.75px;
+			  background: linear-gradient(90deg, rgba(185,220,255,0.12), rgba(185,220,255,0.56), rgba(185,220,255,0.12));
+			  transform-origin: center;
+			}
+
+			.reveal {
+			  position: relative;
+			  z-index: 2;
+			}
+
+			.reveal .slides,
+			#header {
+			  position: relative;
+			  z-index: 10;
+			}
+
+			@keyframes dnaFloat {
+			  0%, 100% {
+			    opacity: 0.28;
+			  }
+			  50% {
+			    opacity: 0.7;
+			  }
+			}
+
+			@keyframes dnaSpin {
+			  0% {
+			    transform: translateX(-50%) translateX(var(--shift, 0px)) rotateY(0deg) scaleY(var(--scale, 1));
+			    opacity: 0.24;
+			  }
+			  25% {
+			    transform: translateX(-50%) translateX(calc(var(--shift, 0px) * 0.7)) rotateY(90deg) scaleY(var(--scale, 1));
+			    opacity: 0.52;
+			  }
+			  50% {
+			    transform: translateX(-50%) translateX(calc(var(--shift, 0px) * -0.15)) rotateY(180deg) scaleY(var(--scale, 1));
+			    opacity: 0.72;
+			  }
+			  75% {
+			    transform: translateX(-50%) translateX(calc(var(--shift, 0px) * 0.7)) rotateY(270deg) scaleY(var(--scale, 1));
+			    opacity: 0.52;
+			  }
+			  100% {
+			    transform: translateX(-50%) translateX(var(--shift, 0px)) rotateY(360deg) scaleY(var(--scale, 1));
+			    opacity: 0.24;
+			  }
+			}
+
+			.reveal .slides section.hero-slide {
+			  display: flex;
+			  align-items: center;
+			  justify-content: center;
+			  padding-top: 42px;
+			  padding-bottom: 36px;
+			}
+
+			.hero-inner {
+			  width: min(980px, 92vw);
+			  margin: 0 auto;
+			  display: flex;
+			  flex-direction: column;
+			  align-items: center;
+			  justify-content: center;
+			  text-align: center;
+			}
+
+			.hero-logo {
+			  display: block;
+			  margin: 0 auto 18px;
+			}
+
+			.reveal .slides section[data-background] {
+			  box-sizing: border-box;
+			}
+
+			#header {
+			  position: fixed;
+			  top: 6px;
+			  left: 10px;
+			  right: 10px;
+			  z-index: 40;
+			  pointer-events: none;
+			}
+
+			.header-left {
+			  display: flex;
+			  align-items: center;
+			  gap: 8px;
+			  width: fit-content;
+			  max-width: calc(100vw - 40px);
+			  padding: 0;
+			  pointer-events: auto;
+			}
+
+			.header-left p {
+			  margin: 0;
+			  white-space: nowrap;
+			  color: var(--blue-100);
+			  font-size: 8px;
+			  line-height: 1;
+			}
+
+			.header-left a {
+			  color: var(--blue-300);
+			}
+
+			.logo-strip {
+			  display: flex;
+			  align-items: center;
+			  gap: 4px;
+			  padding-left: 6px;
+			  border-left: 1px solid rgba(255, 255, 255, 0.16);
+			  flex-wrap: wrap;
+			}
+
+			.logo-chip {
+			  width: 12px;
+			  height: 12px;
+			  display: inline-flex;
+			  align-items: center;
+			  justify-content: center;
+			  opacity: 0.95;
+			}
+
+			.logo-chip img {
+			  width: 100%;
+			  height: 100%;
+			  object-fit: contain;
+			  filter: brightness(0) invert(1);
+			}
+
+			.logo-chip.wide {
+			  width: 28px;
+			}
+
+			.logo-chip.wordmark {
+			  width: 36px;
+			  opacity: 1;
+			}
+
+			.logo-chip.utadeo-mark {
+			  width: 72px;
+			  height: 24px;
+			}
+
+			.logo-chip.wordmark img {
+			  filter: brightness(0) invert(1) drop-shadow(0 0 1px rgba(255, 255, 255, 0.35));
+			}
+
+			.hero-kicker {
+			  display: inline-block;
+			  padding: 0;
+			  border: 0;
+			  border-radius: 0;
+			  background: transparent;
+			  color: var(--blue-300);
+			  font-size: 0.44em;
+			  letter-spacing: 0.14em;
+			  text-transform: uppercase;
+			}
+
+			.hero-title {
+			  margin: 22px 0 12px;
+			  font-size: 1.62em;
+			  line-height: 0.98;
+			}
+
+			.hero-subtitle {
+			  max-width: 820px;
+			  color: var(--ink-soft);
+			  font-size: 0.62em;
+			  line-height: 1.45;
+			  margin: 0 auto;
+			}
+
+			.hero-presenter {
+			  margin: 0 0 16px;
+			  color: var(--blue-300);
+			  font-size: 0.5em;
+			  letter-spacing: 0.12em;
+			  text-transform: uppercase;
+			}
+
+			.presenter-slide {
+			  display: grid;
+			  grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+			  align-items: center;
+			  gap: 32px;
+			}
+
+			.presenter-photo-frame {
+			  padding: 12px;
+			  border-radius: 18px;
+			  background: rgba(255, 255, 255, 0.04);
+			  border: 1px solid rgba(255, 255, 255, 0.1);
+			  width: fit-content;
+			}
+
+			.presenter-photo {
+			  display: block;
+			  width: min(220px, 22vw);
+			  max-width: 100%;
+			  border-radius: 12px;
+			}
+
+			.presenter-copy .section-title {
+			  margin: 0 0 8px;
+			}
+
+			.presenter-role {
+			  margin: 0 0 18px;
+			  color: var(--utadeo-yellow);
+			  font-size: 0.42em;
+			  letter-spacing: 0.12em;
+			  text-transform: uppercase;
+			}
+
+			.presenter-copy .section-lead {
+			  max-width: 640px;
+			}
+
+			.presenter-links {
+			  display: flex;
+			  gap: 14px;
+			  flex-wrap: wrap;
+			  margin-top: 16px;
+			}
+
+			.presenter-link {
+			  color: var(--blue-300);
+			  font-size: 0.42em;
+			  letter-spacing: 0.04em;
+			  text-transform: uppercase;
+			}
+
+			.infographic-slide {
+			  display: flex;
+			  align-items: center;
+			  justify-content: center;
+			  text-align: center;
+			}
+
+			.infographic-frame {
+			  position: relative;
+			  width: min(430px, 34vw);
+			  margin: 0 auto;
+			  padding: 14px;
+			  border-radius: 22px;
+			  background: rgba(255, 255, 255, 0.06);
+			  border: 1px solid rgba(255, 255, 255, 0.12);
+			  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.22);
+			}
+
+			.infographic-image {
+			  display: block;
+			  width: 100%;
+			  max-height: 74vh;
+			  object-fit: contain;
+			  border-radius: 14px;
+			}
+
+			.infographic-expand {
+			  position: absolute;
+			  top: 22px;
+			  right: 22px;
+			  width: 42px;
+			  height: 42px;
+			  border: 0;
+			  border-radius: 12px;
+			  background: rgba(6, 28, 61, 0.74);
+			  color: #ffffff;
+			  font-size: 0.7em;
+			  cursor: pointer;
+			  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+			}
+
+			.infographic-modal {
+			  position: fixed;
+			  inset: 0;
+			  display: none;
+			  align-items: center;
+			  justify-content: center;
+			  padding: 28px;
+			  background: rgba(4, 12, 24, 0.82);
+			  backdrop-filter: blur(8px);
+			  z-index: 120;
+			}
+
+			.infographic-modal.is-open {
+			  display: flex;
+			}
+
+			.infographic-modal-card {
+			  position: relative;
+			  width: min(92vw, 980px);
+			  max-height: 90vh;
+			  padding: 18px;
+			  border-radius: 24px;
+			  background: #0b2349;
+			  border: 1px solid rgba(255, 255, 255, 0.14);
+			  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+			}
+
+			.infographic-modal-image {
+			  display: block;
+			  width: 100%;
+			  max-height: calc(90vh - 36px);
+			  object-fit: contain;
+			  border-radius: 14px;
+			  background: rgba(255, 255, 255, 0.04);
+			}
+
+			.infographic-close {
+			  position: absolute;
+			  top: 14px;
+			  right: 14px;
+			  width: 42px;
+			  height: 42px;
+			  border: 0;
+			  border-radius: 12px;
+			  background: rgba(6, 28, 61, 0.82);
+			  color: #ffffff;
+			  font-size: 1em;
+			  cursor: pointer;
+			}
+
+			.blue-accent {
+			  color: var(--blue-300);
+			}
+
+			.utadeo-accent {
+			  color: var(--utadeo-yellow);
+			}
+
+			.gray-accent {
+			  color: rgba(234, 244, 255, 0.62);
+			}
+
+			.card-grid {
+			  display: grid;
+			  grid-template-columns: repeat(2, minmax(0, 1fr));
+			  gap: 22px;
+			  margin-top: 28px;
+			  align-items: start;
+			}
+
+			.mini-card,
+			.note-box,
+			.frame-panel {
+			  padding: 22px;
+			  border-radius: 16px;
+			  background: rgba(255, 255, 255, 0.06);
+			  border: 1px solid rgba(255, 255, 255, 0.12);
+			  box-shadow: none;
+			}
+
+			.mini-card h3,
+			.note-box h3,
+			.frame-panel h3 {
+			  margin: 0 0 12px;
+			  font-size: 0.62em;
+			  line-height: 1.08;
+			}
+
+			.mini-card p,
+			.note-box p,
+			.frame-panel p {
+			  color: var(--ink-soft);
+			  font-size: 0.62em;
+			  line-height: 1.4;
+			}
+
+			.dna-grid {
+			  display: grid;
+			  grid-template-columns: repeat(4, minmax(0, 1fr));
+			  gap: 18px;
+			  margin-top: 26px;
+			}
+
+			.dna-cell {
+			  padding: 20px;
+			  border-radius: 16px;
+			  background: linear-gradient(180deg, rgba(78, 161, 255, 0.12), rgba(8, 47, 107, 0.18));
+			  border: 1px solid rgba(185, 220, 255, 0.18);
+			}
+
+			.dna-cell strong {
+			  display: block;
+			  margin-bottom: 10px;
+			  color: #ffffff;
+			  font-size: 0.72em;
+			}
+
+			.dna-cell span {
+			  color: var(--blue-100);
+			  font-size: 0.52em;
+			  line-height: 1.35;
+			}
+
+			.flow-line {
+			  display: grid;
+			  grid-template-columns: repeat(4, minmax(0, 1fr));
+			  gap: 18px;
+			  margin-top: 26px;
+			}
+
+			.flow-step {
+			  padding: 18px;
+			  border-radius: 14px;
+			  background: rgba(255, 255, 255, 0.06);
+			  border-left: 4px solid var(--blue-500);
+			}
+
+			.flow-step strong {
+			  display: block;
+			  margin-bottom: 8px;
+			  font-size: 0.6em;
+			}
+
+			.flow-step span {
+			  color: var(--ink-soft);
+			  font-size: 0.47em;
+			  line-height: 1.35;
+			}
+
+			.prompt-grid {
+			  display: grid;
+			  grid-template-columns: repeat(2, minmax(0, 1fr));
+			  gap: 18px;
+			  margin-top: 24px;
+			}
+
+			.prompt-box {
+			  padding: 20px;
+			  border-radius: 14px;
+			  background: rgba(3, 19, 43, 0.45);
+			  border: 1px solid rgba(255, 255, 255, 0.12);
+			}
+
+			.prompt-box strong {
+			  display: block;
+			  margin-bottom: 10px;
+			  font-size: 0.54em;
+			  color: var(--blue-300);
+			  text-transform: uppercase;
+			  letter-spacing: 0.06em;
+			}
+
+			.prompt-box code {
+			  display: block;
+			  white-space: pre-wrap;
+			  font-size: 0.46em;
+			  line-height: 1.5;
+			  color: #ffffff;
+			}
+
+			.prompt-rater {
+			  margin-top: 22px;
+			  display: grid;
+			  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+			  gap: 22px;
+			  align-items: start;
+			}
+
+			.prompt-rater-form,
+			.prompt-rater-result {
+			  padding: 22px;
+			  border-radius: 18px;
+			  background: rgba(3, 19, 43, 0.52);
+			  border: 1px solid rgba(255, 255, 255, 0.12);
+			  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+			}
+
+			.prompt-rater-label {
+			  display: block;
+			  margin-bottom: 10px;
+			  color: var(--utadeo-yellow);
+			  font-size: 0.48em;
+			  font-weight: 700;
+			  letter-spacing: 0.04em;
+			  text-transform: uppercase;
+			}
+
+			.prompt-rater textarea {
+			  width: 100%;
+			  min-height: 230px;
+			  resize: vertical;
+			  border: 1px solid rgba(255, 255, 255, 0.14);
+			  border-radius: 14px;
+			  background: rgba(255, 255, 255, 0.08);
+			  color: #ffffff;
+			  padding: 16px;
+			  font: inherit;
+			  font-size: 0.5em;
+			  line-height: 1.45;
+			  box-sizing: border-box;
+			}
+
+			.prompt-rater textarea::placeholder {
+			  color: rgba(255, 255, 255, 0.48);
+			}
+
+			.prompt-rater-actions {
+			  display: flex;
+			  align-items: center;
+			  gap: 14px;
+			  margin-top: 14px;
+			  flex-wrap: wrap;
+			}
+
+			.prompt-rater-button {
+			  display: inline-flex;
+			  align-items: center;
+			  gap: 8px;
+			  padding: 11px 18px;
+			  border-radius: 999px;
+			  border: 1px solid rgba(242, 194, 79, 0.44);
+			  background: rgba(242, 194, 79, 0.16);
+			  color: var(--utadeo-yellow);
+			  font-size: 0.48em;
+			  font-weight: 700;
+			  cursor: pointer;
+			  transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+			}
+
+			.prompt-rater-button:hover {
+			  transform: translateY(-1px);
+			  background: rgba(242, 194, 79, 0.24);
+			  border-color: rgba(242, 194, 79, 0.62);
+			}
+
+			.prompt-rater-button:disabled {
+			  opacity: 0.62;
+			  cursor: wait;
+			  transform: none;
+			}
+
+			.prompt-rater-status {
+			  color: var(--blue-300);
+			  font-size: 0.44em;
+			}
+
+			.prompt-rater-placeholder {
+			  color: var(--ink-soft);
+			  font-size: 0.52em;
+			  line-height: 1.5;
+			}
+
+			.prompt-score {
+			  display: flex;
+			  align-items: baseline;
+			  gap: 10px;
+			  margin-bottom: 14px;
+			}
+
+			.prompt-score strong {
+			  font-size: 1.2em;
+			  color: #ffffff;
+			}
+
+			.prompt-score span {
+			  color: var(--utadeo-yellow);
+			  font-size: 0.5em;
+			  text-transform: uppercase;
+			  letter-spacing: 0.05em;
+			}
+
+			.prompt-rater-result h3 {
+			  margin: 16px 0 8px;
+			  font-size: 0.5em;
+			  color: var(--blue-100);
+			}
+
+			.prompt-rater-result p,
+			.prompt-rater-result li {
+			  font-size: 0.48em;
+			  line-height: 1.45;
+			  color: var(--ink-soft);
+			}
+
+			.prompt-rater-result ul {
+			  margin: 0;
+			  padding-left: 18px;
+			}
+
+			.prompt-rater-result code {
+			  display: block;
+			  margin-top: 10px;
+			  white-space: pre-wrap;
+			  font-size: 0.42em;
+			  line-height: 1.45;
+			  color: #ffffff;
+			  background: rgba(255, 255, 255, 0.06);
+			  border: 1px solid rgba(255,255,255,0.08);
+			  border-radius: 12px;
+			  padding: 12px;
+			}
+
+			.section-title {
+			  font-size: 0.82em;
+			  line-height: 1.02;
+			  margin: 20px 0 12px;
+			}
+
+			.section-lead {
+			  max-width: 900px;
+			  color: var(--ink-soft);
+			  font-size: 0.62em;
+			  line-height: 1.45;
+			}
+
+			.reveal .slides section .fragment.fade-right,
+			.reveal .slides section .fragment.fade-left,
+			.reveal .slides section .fragment.grow {
+			  opacity: 0;
+			  visibility: inherit;
+			  transform: translateY(14px);
+			}
+
+			.reveal .slides section .fragment.fade-right.visible,
+			.reveal .slides section .fragment.fade-left.visible,
+			.reveal .slides section .fragment.grow.visible {
+			  opacity: 1;
+			  transform: translateY(0);
+			}
+
+			.inline-list {
+			  margin-top: 18px;
+			}
+
+			.inline-list li {
+			  margin-bottom: 14px;
+			}
+
+			.final-quote {
+			  max-width: 860px;
+			  margin: 30px auto 0;
+			  font-size: 0.68em;
+			  line-height: 1.35;
+			  color: var(--blue-100);
+			}
+
+			.embed-stage {
+			  display: flex;
+			  justify-content: center;
+			  margin-top: 18px;
+			}
+
+			.tablet-shell {
+			  position: relative;
+			  width: min(1040px, 92vw);
+			  padding: 20px 18px;
+			  border-radius: 30px;
+			  background: linear-gradient(180deg, #2a4368 0%, #16253d 100%);
+			  border: 1px solid rgba(255, 255, 255, 0.14);
+			  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255,255,255,0.08);
+			}
+
+			.tablet-shell::before {
+			  content: '';
+			  position: absolute;
+			  top: 10px;
+			  left: 50%;
+			  transform: translateX(-50%);
+			  width: 60px;
+			  height: 6px;
+			  border-radius: 999px;
+			  background: rgba(255, 255, 255, 0.08);
+			}
+
+			.tablet-screen {
+			  overflow: hidden;
+			  border-radius: 18px;
+			  background: #ffffff;
+			  box-shadow: inset 0 0 0 1px rgba(10, 18, 30, 0.08);
+			}
+
+			.tablet-screen iframe {
+			  display: block;
+			  width: 100%;
+			  height: 500px;
+			  border: 0;
+			  background: #ffffff;
+			}
+
+			.device-stage {
+			  display: flex;
+			  justify-content: center;
+			  margin-top: 18px;
+			}
+
+			.device-layout {
+			  display: grid;
+			  grid-template-columns: minmax(0, 1fr) minmax(360px, 430px);
+			  align-items: center;
+			  gap: 34px;
+			  min-height: 72vh;
+			}
+
+			.device-copy {
+			  display: flex;
+			  flex-direction: column;
+			  justify-content: center;
+			  min-height: 100%;
+			  padding-right: 8px;
+			}
+
+			.device-copy .section-title {
+			  margin-top: 0;
+			}
+
+			.device-copy .section-lead {
+			  max-width: 100%;
+			  margin-bottom: 0;
+			}
+
+			.device-link {
+			  display: inline-flex;
+			  align-items: center;
+			  gap: 8px;
+			  margin-top: 18px;
+			  padding: 10px 16px;
+			  border-radius: 999px;
+			  background: rgba(242, 194, 79, 0.14);
+			  border: 1px solid rgba(242, 194, 79, 0.44);
+			  color: var(--utadeo-yellow);
+			  font-size: 0.48em;
+			  font-weight: 700;
+			  letter-spacing: 0.01em;
+			  text-decoration: none;
+			  width: fit-content;
+			  transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+			}
+
+			.device-link:hover {
+			  transform: translateY(-1px);
+			  background: rgba(242, 194, 79, 0.2);
+			  border-color: rgba(242, 194, 79, 0.64);
+			}
+
+			.device-link i {
+			  font-size: 0.95em;
+			}
+
+			.device-layout .device-stage {
+			  margin-top: 0;
+			  justify-content: flex-end;
+			}
+
+			.space-layout {
+			  display: grid;
+			  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+			  align-items: center;
+			  gap: 30px;
+			  min-height: 72vh;
+			}
+
+			.space-copy {
+			  display: flex;
+			  flex-direction: column;
+			  justify-content: center;
+			}
+
+			.space-copy .section-title {
+			  margin-top: 0;
+			}
+
+			.space-copy .section-lead {
+			  max-width: 100%;
+			  margin-bottom: 14px;
+			}
+
+			.space-copy .program-points {
+			  padding-left: 18px;
+			}
+
+			.space-copy .program-points li {
+			  margin-bottom: 10px;
+			}
+
+			.space-layout .embed-stage {
+			  margin-top: 0;
+			}
+
+			.device-shell {
+			  position: relative;
+			  width: min(420px, 88vw);
+			  padding: 18px 16px 20px;
+			  border-radius: 36px;
+			  background: linear-gradient(180deg, #233859 0%, #101b30 100%);
+			  border: 1px solid rgba(255, 255, 255, 0.12);
+			  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255,255,255,0.08);
+			}
+
+			.device-shell::before {
+			  content: '';
+			  position: absolute;
+			  top: 9px;
+			  left: 50%;
+			  transform: translateX(-50%);
+			  width: 72px;
+			  height: 8px;
+			  border-radius: 999px;
+			  background: rgba(255, 255, 255, 0.08);
+			}
+
+			.device-shell::after {
+			  content: '';
+			  position: absolute;
+			  top: 8px;
+			  right: 118px;
+			  width: 8px;
+			  height: 8px;
+			  border-radius: 50%;
+			  background: rgba(78, 161, 255, 0.55);
+			  box-shadow: 0 0 0 2px rgba(255,255,255,0.05);
+			}
+
+			.device-screen {
+			  overflow: hidden;
+			  border-radius: 24px;
+			  background: #ffffff;
+			  box-shadow: inset 0 0 0 1px rgba(10, 18, 30, 0.08);
+			}
+
+			.device-screen iframe {
+			  display: block;
+			  width: 100%;
+			  height: 560px;
+			  border: 0;
+			  background: #ffffff;
+			  transform: translateY(-26px);
+			  transform-origin: top center;
+			}
+
+			.program-grid,
+			.social-grid {
+			  display: grid;
+			  grid-template-columns: repeat(2, minmax(0, 1fr));
+			  gap: 18px;
+			  margin-top: 18px;
+			}
+
+			.program-frame,
+			.social-frame {
+			  padding: 12px;
+			  border-radius: 16px;
+			  background: rgba(255, 255, 255, 0.06);
+			  border: 1px solid rgba(255, 255, 255, 0.14);
+			}
+
+			.program-frame h3,
+			.social-frame h3 {
+			  margin: 0 0 10px;
+			  font-size: 0.56em;
+			}
+
+			.social-frame h3 {
+			  margin-bottom: 8px;
+			}
+
+			.program-frame p,
+			.social-frame p {
+			  margin: 0 0 10px;
+			  color: var(--ink-soft);
+			  font-size: 0.46em;
+			  line-height: 1.35;
+			}
+
+			.pdf-frame {
+			  width: 100%;
+			  height: 430px;
+			  border: 0;
+			  border-radius: 12px;
+			  background: #ffffff;
+			}
+
+			.program-detail {
+			  display: grid;
+			  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.15fr);
+			  gap: 24px;
+			  align-items: start;
+			  margin-top: 22px;
+			}
+
+			.program-copy {
+			  display: flex;
+			  flex-direction: column;
+			  justify-content: flex-start;
+			  min-height: 0;
+			  padding-top: 6px;
+			}
+
+			.program-copy h3 {
+			  margin: 0 0 12px;
+			  font-size: 0.18em;
+			  line-height: 1.05;
+			}
+
+			.program-copy p {
+			  margin: 0 0 14px;
+			  color: var(--ink-soft);
+			  font-size: 0.56em;
+			  line-height: 1.42;
+			}
+
+			.program-points {
+			  margin: 0;
+			  padding-left: 20px;
+			}
+
+			.program-points li {
+			  margin-bottom: 10px;
+			  color: #ffffff;
+			  font-size: 0.5em;
+			  line-height: 1.35;
+			}
+
+			.social-link {
+			  display: inline-block;
+			  margin-top: 10px;
+			  color: var(--blue-300);
+			  font-size: 0.46em;
+			}
+
+			.social-meta {
+			  display: inline-flex;
+			  align-items: center;
+			  gap: 8px;
+			  margin-bottom: 10px;
+			  color: var(--blue-300);
+			  font-size: 0.38em;
+			  letter-spacing: 0.04em;
+			  text-transform: uppercase;
+			}
+
+			.social-badge {
+			  display: inline-flex;
+			  align-items: center;
+			  justify-content: center;
+			  min-width: auto;
+			  padding: 0;
+			  border-radius: 0;
+			  background: transparent;
+			  border: 0;
+			}
+
+			.social-quote {
+			  margin: 0;
+			  padding-left: 14px;
+			  border-left: 3px solid rgba(78, 161, 255, 0.55);
+			  color: #ffffff;
+			  font-size: 0.5em;
+			  line-height: 1.45;
+			}
+
+			.reveal .slides section.embed-slide .section-title {
+			  margin-bottom: 8px;
+			  font-size: 0.74em;
+			  line-height: 1.05;
+			}
+
+			.reveal .slides section.embed-slide .section-lead {
+			  max-width: 100%;
+			  margin-bottom: 0;
+			  font-size: 0.45em;
+			  line-height: 1.32;
+			}
+
+			.reveal .slides section.overview-slide .mini-card,
+			.reveal .slides section.overview-slide .dna-cell {
+			  padding: 14px 0 0;
+			  border: 0;
+			  border-top: 1px solid rgba(255, 255, 255, 0.18);
+			  border-radius: 0;
+			  background: transparent;
+			  box-shadow: none;
+			}
+
+			.reveal .slides section.overview-slide .card-grid,
+			.reveal .slides section.overview-slide .dna-grid {
+			  gap: 16px 22px;
+			}
+
+			.agenda-slide .card-grid {
+			  margin-top: 22px;
+			  gap: 14px 18px;
+			}
+
+			.agenda-slide .mini-card {
+			  padding: 18px 20px;
+			  border-radius: 18px;
+			  background: rgba(255, 255, 255, 0.08);
+			}
+
+			.agenda-icon {
+			  display: inline-flex;
+			  align-items: center;
+			  justify-content: center;
+			  width: 40px;
+			  height: 40px;
+			  margin-bottom: 12px;
+			  color: var(--utadeo-yellow);
+			  font-size: 0.8em;
+			  background: rgba(242, 194, 79, 0.08);
+			  border: 1px solid rgba(242, 194, 79, 0.24);
+			  border-radius: 12px;
+			}
+
+			.agenda-step {
+			  display: inline-flex;
+			  align-items: center;
+			  justify-content: flex-start;
+			  width: auto;
+			  height: auto;
+			  margin-bottom: 10px;
+			  border-radius: 0;
+			  background: transparent;
+			  border: 0;
+			  color: var(--blue-100);
+			  font-size: 0.46em;
+			  font-weight: 700;
+			  letter-spacing: 0.04em;
+			}
+
+			.agenda-slide .mini-card h3 {
+			  margin-bottom: 8px;
+			  font-size: 0.44em;
+			  line-height: 1.08;
+			  color: var(--utadeo-yellow);
+			}
+
+			.agenda-slide .mini-card p {
+			  margin: 0;
+			  font-size: 0.43em;
+			  line-height: 1.34;
+			}
+
+			.pregrado-slide .card-grid {
+			  margin-top: 22px;
+			  gap: 18px 22px;
+			}
+
+			.pregrado-slide .mini-card {
+			  position: relative;
+			  overflow: hidden;
+			  background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.05) 100%);
+			  border: 1px solid rgba(255,255,255,0.12);
+			}
+
+			.pregrado-slide .mini-card::after {
+			  content: '';
+			  position: absolute;
+			  inset: 0 auto 0 0;
+			  width: 4px;
+			  background: linear-gradient(180deg, var(--utadeo-yellow) 0%, rgba(242, 194, 79, 0.18) 100%);
+			}
+
+			.pregrado-icon {
+			  display: inline-flex;
+			  align-items: center;
+			  justify-content: center;
+			  width: 42px;
+			  height: 42px;
+			  margin-bottom: 12px;
+			  border-radius: 12px;
+			  background: rgba(242, 194, 79, 0.1);
+			  border: 1px solid rgba(242, 194, 79, 0.24);
+			  color: var(--utadeo-yellow);
+			  font-size: 0.78em;
+			}
+
+			.pregrado-slide .mini-card h3 {
+			  color: var(--utadeo-yellow);
+			  font-size: 0.32em;
+			  line-height: 1.15;
+			  padding-left: 0;
+			  margin-bottom: 6px;
+			}
+
+			.pregrado-slide .mini-card h3::before {
+			  content: none;
+			}
+
+			.pregrado-slide .mini-card p {
+			  max-width: 28ch;
+			}
+
+			/* Title polish */
+			.section-title {
+			  position: relative;
+			  padding-left: 18px;
+			  margin-bottom: 16px;
+			  color: var(--blue-100);
+			  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.14);
+			}
+
+			.title-icon {
+			  display: inline-flex;
+			  align-items: center;
+			  justify-content: center;
+			  width: 34px;
+			  height: 34px;
+			  margin-right: 12px;
+			  border-radius: 10px;
+			  background: rgba(242, 194, 79, 0.1);
+			  color: var(--utadeo-yellow);
+			  box-shadow: inset 0 0 0 1px rgba(242, 194, 79, 0.18);
+			  vertical-align: middle;
+			  font-size: 0.62em;
+			}
+
+			.hero-title .title-icon {
+			  width: 42px;
+			  height: 42px;
+			  margin-right: 14px;
+			  font-size: 0.52em;
+			}
+
+			.section-title::before {
+			  content: none;
+			}
+
+			.mini-card h3,
+			.note-box h3,
+			.frame-panel h3,
+			.program-frame h3,
+			.social-frame h3,
+			.program-copy h3 {
+			  position: relative;
+			  padding-left: 15px;
+			  color: var(--blue-100);
+			  letter-spacing: 0.01em;
+			}
+
+			.mini-card h3::before,
+			.note-box h3::before,
+			.frame-panel h3::before,
+			.program-frame h3::before,
+			.social-frame h3::before,
+			.program-copy h3::before {
+			  content: none;
+			}
+
+			.flow-step strong,
+			.prompt-box strong,
+			.presenter-role {
+			  color: var(--utadeo-yellow);
+			}
+
+			.flow-step strong {
+			  letter-spacing: 0.03em;
+			}
+
+			.presenter-link:hover,
+			.social-link:hover {
+			  color: var(--utadeo-yellow);
+			}
+
+			.tweet-center-slide {
+			  display: flex;
+			  align-items: center;
+			  justify-content: center;
+			  text-align: center;
+			  padding-bottom: 24px;
+			}
+
+			.tweet-center-slide .tweet {
+			  width: 100%;
+			  display: flex;
+			  justify-content: center;
+			  align-items: flex-start;
+			  margin: 0 auto;
+			}
+
+			.tweet-center-slide iframe,
+			.tweet-center-slide twitterwidget {
+			  margin-left: auto !important;
+			  margin-right: auto !important;
+			  transform: scale(0.9);
+			  transform-origin: top center;
+			}
+
+			.program-detail .program-copy h3 {
+			  font-size: 0.28em;
+			  line-height: 1.15;
+			  color: var(--utadeo-yellow);
+			  letter-spacing: 0.02em;
+			}
+
+			@media (max-width: 900px) {
+			  .card-grid,
+			  .prompt-grid,
+			  .flow-line,
+			  .dna-grid,
+			  .program-grid,
+			  .social-grid,
+			  .program-detail {
+			    grid-template-columns: 1fr;
+			  }
+
+			  .hero-title {
+			    font-size: 1.7em;
+			  }
+
+			  .reveal .slides section {
+			    padding-top: 52px;
+			  }
+
+			  .reveal .slides section.hero-slide {
+			    padding-top: 52px;
+			    padding-bottom: 28px;
+			  }
+
+			  .hero-subtitle,
+			  .section-lead {
+			    font-size: 0.64em;
+			  }
+
+			  .header-left {
+			    align-items: flex-start;
+			    flex-direction: column;
+			    border-radius: 18px;
+			  }
+
+			  .logo-strip {
+			    border-left: 0;
+			    border-top: 1px solid rgba(255, 255, 255, 0.16);
+			    padding-left: 0;
+			    padding-top: 8px;
+			  }
+
+			  .tablet-shell {
+			    width: min(94vw, 820px);
+			    padding: 18px 14px;
+			    border-radius: 24px;
+			  }
+
+			  .device-layout {
+			    grid-template-columns: 1fr;
+			    gap: 18px;
+			  }
+
+			  .space-layout {
+			    grid-template-columns: 1fr;
+			    gap: 18px;
+			    min-height: 0;
+			  }
+
+			  .prompt-rater {
+			    grid-template-columns: 1fr;
+			  }
+
+			  .presenter-slide {
+			    grid-template-columns: 1fr;
+			    gap: 18px;
+			  }
+
+			  .infographic-frame {
+			    width: min(72vw, 420px);
+			  }
+
+			  .presenter-photo {
+			    width: min(280px, 58vw);
+			  }
+
+			  .device-copy {
+			    min-height: 0;
+			  }
+
+			  .tablet-screen {
+			    border-radius: 14px;
+			  }
+
+			  .tablet-screen iframe {
+			    height: 360px;
+			  }
+
+			  .device-shell {
+			    width: min(360px, 90vw);
+			    padding: 16px 14px 18px;
+			    border-radius: 30px;
+			  }
+
+			  .device-screen {
+			    border-radius: 20px;
+			  }
+
+			  .device-screen iframe {
+			    height: 460px;
+			    transform: translateY(-18px);
+			  }
+
+			  .pdf-frame {
+			    height: 320px;
+			  }
+
+			  .program-copy {
+			    min-height: 0;
+			  }
+			}
+
+			.circular--landscape {
+			  display: inline-block;
+			  position: relative;
+			  width: 80px;
+			  height: 80px;
+			  overflow: hidden;
+			  border-radius: 50%;
+			}
+
+			.circular--landscape img {
+			  width: auto;
+			  height: auto;
+			  margin-top: -30px;
+			  margin-left: -20px;
+			  filter: grayscale(100%);
+			}
+
+			.circular--landscape2 {
+			  display: inline-block;
+			  position: relative;
+			  width: 80px;
+			  height: 80px;
+			  overflow: hidden;
+			  border-radius: 50%;
+			}
+
+			.circular--landscape2 img {
+			  width: auto;
+			  height: 180px;
+			  margin-top: -10px;
+			  margin-left: -35px;
+			  filter: grayscale(100%);
+			}
+
+			.circular--landscape3 {
+			  display: inline-block;
+			  position: relative;
+			  width: 80px;
+			  height: 80px;
+			  overflow: hidden;
+			  border-radius: 50%;
+			}
+
+			.circular--landscape3 img {
+			  width: auto;
+			  height: 300px;
+			  margin-top: -50px;
+			  margin-left: -40px;
+			  filter: grayscale(100%);
+			}
+
+			[data-n-id='10'] rect {
+			  fill: #00b398;
+			}
+
+			[data-n-id='11'] rect {
+			  fill: #00b398;
+			}
+
+			[data-n-id='12'] rect {
+			  fill: #00b398;
+			}
+
+			[data-n-id='13'] rect {
+			  fill: #00b398;
+			}
+
+			[data-n-id='3'] rect {
+			  border-color: #00b398;
+			  filter: drop-shadow(4px 5px 5px #838383);
+			}
+		</style>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>Semana de la C&I </title>
+		<title>Taller ADN de la IA 2026</title>
 
 		<link rel="stylesheet" href="dist/reset.css">
 		<link rel="stylesheet" href="dist/reveal.css">
@@ -20,410 +1501,793 @@
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css">
 		
 		
-		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="plugin/highlight/monokai.css">
-			.circular--landscape {
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
-  overflow: hidden;
-  border-radius: 50%;
-}
-
-.circular--landscape img {
-  width: auto;
-  height: auto;
-  margin-top: -30px;
-  margin-left: -20px;
-  filter: grayscale(100%);
-}
-
-.circular--landscape2 {
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
-  overflow: hidden;
-  border-radius: 50%;
-}
-
-.circular--landscape2 img {
-  width: auto;
-  height: 180px;
-  margin-top: -10px;
-  margin-left: -35px;
-  filter: grayscale(100%);
-}
-
-.circular--landscape3 {
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
-  overflow: hidden;
-  border-radius: 50%;
-}
-
-.circular--landscape3 img {
-  width: auto;
-  height: 300px;
-  margin-top: -50px;
-  margin-left: -40px;
-  filter: grayscale(100%);
-}
-[data-n-id='10'] rect {
-            fill: #00b398;
-        }
-		[data-n-id='11'] rect {
-            fill: #00b398;
-        }
-		[data-n-id='12'] rect {
-            fill: #00b398;
-        }
-		[data-n-id='13'] rect {
-            fill: #00b398;
-        }
-		[data-n-id='3'] rect {
-            border-color: #00b398;
-			filter: drop-shadow( 4px 5px 5px #838383);
-        }
-
-
-		</style>
-		
 	</head>
 
 
 	<body>   
+		<div class="dna-background" aria-hidden="true">
+			<div class="dna-helix left" id="dna-left"></div>
+			<div class="dna-helix right" id="dna-right"></div>
+		</div>
 		<div class="reveal">
 			
 			<div id="header">
-				<div class="header-left">  <p style="font-size:25%;"> Romero-Gelvez, J |  
-			   <a href="https://www.utadeo.edu.co/es/evento/academicos/semana-de-la-ciencia-y-la-ingenieria/home/1#:~:text=%C3%9Anete%20a%20nosotros%20del%2014,la%20innovaci%C3%B3n%20y%20el%20emprendimiento."> jorgei.romerog@utadeo.edu.co</a></p> </div>
+				<div class="header-left">
+					<p><span class="utadeo-accent">Taller Ruta 4-22</span> | <a href="mailto:jorgei.romerog@utadeo.edu.co">jorgei.romerog@utadeo.edu.co</a></p>
+					<div class="logo-strip" aria-label="Tecnologias IA">
+						<span class="logo-chip wordmark utadeo-mark" title="Utadeo"><img src="70años-fondososcuros.png" alt="Utadeo"></span>
+						<span class="logo-chip" title="TensorFlow"><img src="https://cdn.simpleicons.org/tensorflow/white" alt="TensorFlow"></span>
+						<span class="logo-chip" title="Hugging Face"><img src="https://cdn.simpleicons.org/huggingface/white" alt="Hugging Face"></span>
+						<span class="logo-chip wordmark" title="OpenAI"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/OpenAI_Logo.svg" alt="OpenAI"></span>
+						<span class="logo-chip wordmark" title="DeepSeek"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/DeepSeek_logo.svg" alt="DeepSeek"></span>
+						<span class="logo-chip" title="Claude"><img src="https://cdn.simpleicons.org/anthropic/white" alt="Claude"></span>
+						<span class="logo-chip wordmark" title="Grok"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Grok_logo_(2023-2025).svg" alt="Grok"></span>
+					</div>
+				</div>
 			</div>
 		
 			<div class="slides">
-				<section data-auto-animate data-auto-animate-unmatched="fade" data-background="#5343ba">
-					<a href="https://www.utadeo.edu.co">
-						<img src="70años-fondososcuros.png" 
-						alt="logo" style="height: 200px;  " class="demo-logo">
-					</a>
-					
-					<h3>Semana de la Ciencia y la Ingeniería </h3>
-					
-					
-					</section>
-				<section data-auto-animate data-auto-animate-unmatched="fade" data-background="#5343ba">
-					<a href="https://www.utadeo.edu.co">
-						<img src="70años-fondososcuros.png" 
-						alt="logo" style="height: 200px;  " class="demo-logo">
-					</a>
-					
-					<h3 style="opacity: 0.2; margin-top: 50px;">Semana de la Ciencia y la Ingeniería </h3>
-							
-							<p><span style="color:rgb(241, 192, 124)">Workshop Inteligencia artificial</span> </p>
-
-
+				<section class="centered-slide hero-slide" data-auto-animate data-auto-animate-unmatched="fade" data-background="#061c3d">
+					<div class="hero-inner">
+						<a href="https://www.utadeo.edu.co" class="hero-logo">
+							<img src="70años-fondososcuros.png" alt="logo" style="height: 190px;" class="demo-logo">
+						</a>
+						<div class="hero-kicker"><span class="utadeo-accent">Taller Ruta 4-22</span> · Universidad Jorge Tadeo Lozano</div>
+						<h1 class="hero-title"><span class="title-icon"><i class="fas fa-dna"></i></span>El <span class="blue-accent">ADN</span> de la IA</h1>
+						<div class="hero-presenter">Jorge Romero</div>
+						<p class="hero-subtitle fragment fade-up">Datos, modelos y criterio para entender la IA.</p>
+					</div>
 				</section>
 
-				<section data-transition="zoom" data-background="#003865">
-					<h2>1. Programas enfocados en la era digital</h2>
-					
-						<ul>
-							<li>Ingeniería de Sistemas</li>
-							<li>Ingeniería en Automatización</li>
-							<li>Ingeniería en Energía</li>
-							<li>Ingeniería Industrial</li>
-							<li>Modelado y simulación computacional</li>
-						</ul>
-						
+				<section class="centered-slide tweet-center-slide" data-transition="zoom" data-background="#082f6b">
+					<div class="tweet" data-src="https://twitter.com/karpathy/status/1617979122625712128?ref_src=twsrc%5Etfw"></div>
 				</section>
-				<section data-transition="zoom" data-background="#003865">
-					<h2>1. La  Ingeniería de Sistemas en la utadeo</h2>
-			
-					<iframe src="malla_ingenieria_de_sistemas-20231004 (1).pdf" width="600" height="400"></iframe>
 
+				<section class="centered-slide tweet-center-slide" data-transition="zoom" data-background="#082f6b">
+					<div class="tweet" data-src="https://twitter.com/dw_espanol/status/2039040028383330376?ref_src=twsrc%5Etfw"></div>
 				</section>
-		
-			<section data-transition="zoom" data-background="#003865">
-				<h2>1. La  Ingeniería de Sistemas en la utadeo</h2>
-						
-							<ul>
-								<li>Linea de bases de datos</li>
-								<li>Linea de Programación</li>
-							</ul>
-							
-			</section>
-			<section data-transition="zoom" data-background="#003865">
-				<h2>2. La  Ingeniería Industrial en la utadeo</h2>
-				<iframe src="malla_ingenieria_industrial-20231004 (1).pdf" width="600" height="400"></iframe>
 
-				</section>
-				
-				<section data-transition="zoom" data-background="#003865">
-					<h2>1. La  Ingeniería de Sistemas en la utadeo</h2>
-							
-								<ul>
-									<li>Linea de administración de cadena de suministro e Industria 4.0</li>
-									<li>Linea de administración de sistemas Organizacionales</li>
-								</ul>
-				</section>
-				<section data-transition="zoom" data-background="#003865">
-					<h2> Un punto de convergencia del area</h2>
-					<p>Los datos </p>
-				
-				</section>
-				<section data-transition="zoom" data-background="#003865">
-					<h2> ¿Qué es la Analítica de Datos?</h2>
-					<p>Es el proceso de examinar, limpiar, transformar y modelar datos para descubrir información útil, llegar a conclusiones y apoyar la toma de decisiones. Con la analítica de datos, las empresas pueden tomar decisiones basadas en datos, no en suposiciones. </p>
-				
-				</section>
-				  <section data-transition="zoom" data-background="#003865">
-					<h2>¿Qué es la Analítica de Datos?</h2> 
-				
-					<div class="r-stack">
-						
-						<p class="fragment fade-in-then-out">Por ejemplo, Netflix utiliza analítica de datos para recomendar películas y series a sus usuarios.</p>
-						<img src="https://cdn.statcdn.com/Infographic/images/normal/29452.jpeg"  width="600" height="450" class="fragment fade-in-then-out">
-						<img src="https://cdn.statcdn.com/Infographic/images/normal/29600.jpeg"  width="600" height="450" class="fragment fade-in-then-out">	
-							
-				 </section>
-				  <section data-transition="zoom" data-background="#003865">
-					<h2> ¿Qué son las Bases de Datos?</h2>
-					
-					<div class="r-stack">
-						<p class="fragment fade-in-then-out">Una base de datos es una colección organizada de datos. Las bases de datos permiten a las empresas almacenar, recuperar y manipular datos de manera eficiente.</p>
-						<p class="fragment fade-in-then-out">Por ejemplo, cada vez que usas una aplicación en tu teléfono o visitas un sitio web, es muy probable que estés interactuando con una base de datos de alguna forma.</p>
-						<p class="fragment fade-in-then-out">Un ejemplo de vanguardia del uso de bases de datos es GISAID, una base de datos global que recopila secuencias genómicas del virus SARS-CoV-2, el virus que causa el COVID-19.</p>
-				</section>
-					
-					
-	
-				  <section data-transition="zoom" data-background="#003865">
-					<h2> ¿Qué son las Bases de Datos?</h2>
-				
-					<div class="r-stack">
-						<p class="fragment fade-in-then-out">Los científicos de todo el mundo han estado compartiendo las secuencias genómicas del virus en esta base de datos, lo que ha sido crucial para rastrear la propagación del virus y el surgimiento de nuevas variantes.</p>
-					
-						<img src="https://www.eurosurveillance.org/docserver/fulltext/eurosurveillance/25/32/2001410-f1.gif"  width="600" height="450" class="fragment fade-in-then-out">	
-							
-					
-					
-				
-				  </section>
-				<section data-background-color="#003865">
-						<h3>DATOS DEL MERCADO LABORAL</h3>
-						<div style="height:480px">
-										<canvas data-chart="pie">
-						Sistemas-software 97432, Administracion 83098, Industrial 51751,    
-						Ofertas laborales, 97432, 83098, 51751
-						</canvas>
+				<section class="centered-slide infographic-slide" data-transition="zoom" data-background="#082f6b">
+					<div>
+						<h2 class="section-title fragment fade-up"><span class="title-icon"><i class="fas fa-chart-bar"></i></span>Panorama IA 2025</h2>
+						<div class="infographic-frame fragment grow">
+						<button class="infographic-expand" type="button" aria-label="Ampliar infografía Domo" data-open-infographic>
+							<i class="fas fa-expand-alt"></i>
+						</button>
+						<img class="infographic-image" src="domo-ai-edition-2025.avif" alt="Infografía Domo sobre IA 2025">
 						</div>
-						<small>Ofertas laborales en 2022 en elempleo.com</small>
-
+					</div>
 				</section>
-				<section>
-					<h3>LOS TRABAJOS QUE MAS CRECERAN EN 10 AÑOS</h3>			
-					  <img  src="https://www.visualcapitalist.com/wp-content/uploads/2021/09/fastest-growing-jobs-next-decade.jpg" width="500" height="640">
-				</section>	
-				<section data-transition="zoom">
-					<h3>CARRERAS EN TECNOLOGIA</h3>
-					<div class="tweet" data-src="https://twitter.com/Alvaro_MontesG/status/1228658621891989504"></div>
-				</section >
 
-				<section data-transition="zoom">
-					<h3>CARRERAS EN TECNOLOGIA</h3>
-					<div class="tweet" data-src="https://twitter.com/BLS_gov/status/1103728269982134279"></div>
+				<section class="overview-slide agenda-slide" data-transition="zoom" data-background="#082f6b">
+					<h2 class="section-title"><span class="title-icon"><i class="fas fa-route"></i></span>Ruta del taller</h2>
+					<p class="section-lead">La idea no es memorizar definiciones, sino entender cómo se arma un sistema de IA y cómo usarlo con intención.</p>
+					<div class="card-grid">
+						<div class="mini-card fragment fade-up">
+							<div class="agenda-icon"><i class="fas fa-dna"></i></div>
+							<div class="agenda-step">1</div>
+							<h3>El ADN</h3>
+							<p>Qué piezas mínimas necesita un sistema de IA para producir algo útil.</p>
+						</div>
+						<div class="mini-card fragment fade-right" data-fragment-index="1">
+							<div class="agenda-icon"><i class="fas fa-brain"></i></div>
+							<div class="agenda-step">2</div>
+							<h3>Cómo aprende</h3>
+							<p>Datos, patrones, entrenamiento y por qué el contexto importa tanto.</p>
+						</div>
+						<div class="mini-card fragment fade-left" data-fragment-index="2">
+							<div class="agenda-icon"><i class="fas fa-comments"></i></div>
+							<div class="agenda-step">3</div>
+							<h3>Cómo se usa</h3>
+							<p>Prompts, iteración, ejemplos, límites y verificación.</p>
+						</div>
+						<div class="mini-card fragment grow" data-fragment-index="3">
+							<div class="agenda-icon"><i class="fas fa-shield-alt"></i></div>
+							<div class="agenda-step">4</div>
+							<h3>Cómo se gobierna</h3>
+							<p>Riesgos, sesgos, privacidad y criterio humano en el centro.</p>
+						</div>
+					</div>
 				</section>
-								
 
-				<section data-transition="zoom">
-					<h3>CARRERAS EN TECNOLOGIA</h3>
-					<div class="tweet" data-src="https://twitter.com/GorritiMikel/status/1351568090585247749"></div>
+				<section class="pregrado-slide" data-transition="zoom" data-background="#0a3a74">
+					<h2 class="section-title"><span class="title-icon"><i class="fas fa-university"></i></span>Pregrados conectados con la <span class="gray-accent">IA</span> en la Utadeo</h2>
+					<p class="section-lead">Estos planes de estudio ayudan a aterrizar el taller en la oferta real de pregrado. En vez de comprimirlos en una sola vista, aquí quedan separados para que se lean bien y se pueda comentar cada uno con calma.</p>
+					<div class="card-grid">
+						<div class="mini-card fragment fade-up">
+							<div class="pregrado-icon"><i class="fas fa-laptop-code"></i></div>
+							<h3>Ingeniería de Sistemas</h3>
+							<p>Programación, bases de datos, inteligencia artificial, arquitectura de software y ciberseguridad.</p>
+						</div>
+						<div class="mini-card fragment fade-up" data-fragment-index="1">
+							<div class="pregrado-icon"><i class="fas fa-industry"></i></div>
+							<h3>Ingeniería Industrial</h3>
+							<p>Analítica, optimización, logística, transformación digital y toma de decisiones en organizaciones.</p>
+						</div>
+					</div>
 				</section>
-				<section data-transition="zoom" data-background="#003865">
-					<h3>La universidad</h3>
-					<div class="r-stack">
-						<p class="fragment fade-in-then-out">Excelente planta docente</p>
-						<img src="https://www.utadeo.edu.co/sites/tadeo/files/styles/multimedia_image/public/multimedia/images/gallery/bv7b1230-2.jpg?itok=al5_xeZT" width="700" height="450" class="fragment fade-in-then-out">	
-						<img src="https://www.utadeo.edu.co/sites/tadeo/files/node/wysiwyg/sala-bloomberg-utadeo-modelo-de-alternancia-1.jpg" width="700" height="450" class="fragment fade-in-then-out">	
-						<img src="https://www.utadeo.edu.co/sites/tadeo/files/styles/especial_980x670/public/multimedia/images/gallery/ingreso-a-utadeo-2021-alternancia-latadeotequierebien.utadeo.9.jpg?itok=7LEN7UKK" width="700" height="450" class="fragment fade-in-then-out">	
-						<img src="https://www.utadeo.edu.co/sites/tadeo/files/node/multimedia/image_cover/exp03.png" width="700" height="450" class="fragment fade-in-then-out">	
-						
-						
 
-						
-
-						
-						<p class="fragment fade-in-then-out">Grupos de investigación de primer nivel</p>
-						<img src="https://www.utadeo.edu.co/sites/tadeo/files/node/news/field_images/penn_state_foto.jpg" width="500" height="350" class="fragment fade-in-then-out">
-						<img src="https://www.unicamp.br/unicamp/sites/default/files/field/image/ju_647_p3_a_b_web.jpg#overlay-context=ju/647/inteligente-e-mais-barato" width="500" height="350" class="fragment fade-in-then-out">
-						<img src="https://www.utadeo.edu.co/sites/tadeo/files/node/wysiwyg/webnota_entrevista_andres_aristizabal_energia_fotovoltaica_choco_20170725_002.jpg" width="500" height="350" class="fragment fade-in-then-out">
-						<img src="https://www.utadeo.edu.co/sites/tadeo/files/node/wysiwyg/whatsapp_image_2021-06-29_at_10.32.08_1.jpeg" width="500" height="350" class="fragment fade-in-then-out">
-
-						
+				<section data-transition="zoom" data-background="#0a3a74">
+					<h2 class="section-title"><span class="title-icon"><i class="fas fa-laptop-code"></i></span>Ingeniería de Sistemas</h2>
+					<div class="program-detail">
+						<div class="program-copy">
+							<h3>Una ruta directa hacia software, datos e IA</h3>
+							<p class="fragment fade-up">Este programa conecta muy bien con el taller porque toca varias de las piezas del ADN de la IA: programación, estructuras de datos, bases de datos, analítica, arquitectura y desarrollo de soluciones digitales.</p>
+							<ul class="program-points">
+								<li class="fragment fade-right">Bases sólidas para construir y entender sistemas inteligentes.</li>
+								<li class="fragment fade-right" data-fragment-index="1">Relación directa con software, datos, automatización y servicios digitales.</li>
+								<li class="fragment fade-right" data-fragment-index="2">Buen puente hacia analítica, IA aplicada y desarrollo de producto.</li>
+							</ul>
+						</div>
+						<div class="program-frame">
+							<iframe class="pdf-frame" src="malla_ingenieria_de_sistemas-20231004 (1).pdf"></iframe>
+						</div>
+					</div>
 				</section>
-	
-										
-				<section data-transition="zoom">
-					<h3>TOP 10 HABILIDADES LABORALES PARA 2025</h3>
-					<div class="tweet" data-src="https://twitter.com/wef/status/1442987634565869568"></div>
-							</section>
-			
-				
-			
-				
-		
-			
-				
-				
-				
-			  
 
-				<section data-transition="slide" data-background="#003865">
+				<section data-transition="zoom" data-background="#082f6b">
+					<h2 class="section-title"><span class="title-icon"><i class="fas fa-industry"></i></span>Ingeniería Industrial</h2>
+					<div class="program-detail">
+						<div class="program-copy">
+							<h3>IA para optimización, procesos y decisiones</h3>
+							<p class="fragment fade-up">Aquí la conversación se mueve hacia analítica, operación y transformación digital. Es una entrada muy fuerte para pensar la IA como herramienta para mejorar procesos, apoyar decisiones y rediseñar organizaciones.</p>
+							<ul class="program-points">
+								<li class="fragment fade-left">Conexión clara con analítica, logística y modelado de operaciones.</li>
+								<li class="fragment fade-left" data-fragment-index="1">Uso de datos para mejorar decisiones y desempeño organizacional.</li>
+								<li class="fragment fade-left" data-fragment-index="2">Puente natural hacia automatización e industria inteligente.</li>
+							</ul>
+						</div>
+						<div class="program-frame">
+							<iframe class="pdf-frame" src="malla_ingenieria_industrial-20231004 (1).pdf"></iframe>
+						</div>
+					</div>
+				</section>
 
-					<h2>Gracias por su atencion!</h2>
+				<section class="overview-slide" data-transition="zoom" data-background="#0a3a74">
+					<h2 class="section-title"><span class="title-icon"><i class="fas fa-microscope"></i></span>¿Qué significa hablar del ADN de la IA?</h2>
+					<p class="section-lead">Así como el ADN codifica instrucciones biológicas, en IA hay una estructura base que determina qué puede hacer el sistema, con qué calidad y con qué riesgos.</p>
+					<div class="dna-grid">
+						<div class="dna-cell fragment fade-up">
+							<strong>D · Datos</strong>
+							<span>La materia prima: textos, imágenes, audio, registros, ejemplos y contexto.</span>
+						</div>
+						<div class="dna-cell fragment fade-up" data-fragment-index="1">
+							<strong>N · Network / Modelo</strong>
+							<span>La arquitectura que detecta patrones y transforma entradas en salidas.</span>
+						</div>
+						<div class="dna-cell fragment fade-up" data-fragment-index="2">
+							<strong>A · Aprendizaje</strong>
+							<span>El proceso de ajuste para que el modelo reduzca errores y mejore resultados.</span>
+						</div>
+						<div class="dna-cell fragment fade-up" data-fragment-index="3">
+							<strong>+ Humano</strong>
+							<span>El criterio que formula objetivos, evalúa respuestas y define límites.</span>
+						</div>
+					</div>
+				</section>
 
-					
-					
-					<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Jorge_Tadeo_Lozano_University_logo.svg/1280px-Jorge_Tadeo_Lozano_University_logo.svg.png" alt="reveal.js logo" style="height: 180px; margin: 0 auto 4rem auto; background: transparent;" class="demo-logo">
-					
+				<section data-transition="zoom" data-background="#0a4b9c">
+					<h2 class="section-title"><span class="title-icon"><i class="fas fa-database"></i></span>Base 1: los datos</h2>
+					<p class="section-lead">Si los datos son pobres, sesgados o incompletos, la IA aprende mal. No hay modelo brillante que compense datos defectuosos.</p>
+					<ul class="inline-list">
+						<li class="fragment fade-right">Los datos enseñan lenguaje, patrones, relaciones y excepciones.</li>
+						<li class="fragment fade-right" data-fragment-index="1">La calidad importa más que el volumen cuando el objetivo es específico.</li>
+						<li class="fragment fade-right" data-fragment-index="2">Privacidad, permisos y procedencia ya no son detalles técnicos: son parte del diseño.</li>
+					</ul>
+				</section>
+
+				<section data-transition="zoom" data-background="#0a3a74">
+					<h2 class="section-title"><span class="title-icon"><i class="fas fa-brain"></i></span>Base 2: el modelo</h2>
+					<p class="section-lead">El modelo no “piensa” como una persona. Calcula relaciones probables a partir de patrones vistos durante su entrenamiento.</p>
+					<div class="flow-line">
+						<div class="flow-step fragment fade-up">
+							<strong>Entrada</strong>
+							<span>Texto, imagen, voz, tabla o señal.</span>
+						</div>
+						<div class="flow-step fragment fade-up" data-fragment-index="1">
+							<strong>Representación</strong>
+							<span>La información se convierte en vectores o tokens.</span>
+						</div>
+						<div class="flow-step fragment fade-up" data-fragment-index="2">
+							<strong>Predicción</strong>
+							<span>El modelo estima la salida más probable.</span>
+						</div>
+						<div class="flow-step fragment fade-up" data-fragment-index="3">
+							<strong>Respuesta</strong>
+							<span>Devuelve texto, clasificación, imagen o decisión sugerida.</span>
+						</div>
+					</div>
+				</section>
+
+				<section class="embed-slide" data-transition="zoom" data-background="#061c3d">
+					<div class="space-layout">
+						<div class="space-copy">
+							<h2 class="section-title"><span class="title-icon"><i class="fas fa-project-diagram"></i></span>Feed Forward</h2>
+							<p class="section-lead">Antes de los LLM conviene ver la red más simple: una red feed forward toma una entrada, la pasa hacia adelante por capas densas y produce una salida sin memoria del pasado.</p>
+							<ul class="program-points">
+								<li class="fragment fade-right">Este playground permite mover entradas y ver cómo cambia la salida de la red.</li>
+								<li class="fragment fade-right" data-fragment-index="1">Cada capa transforma la señal, pero no “recuerda” pasos anteriores.</li>
+								<li class="fragment fade-right" data-fragment-index="2">Sirve para entender pesos, activaciones y frontera de decisión.</li>
+							</ul>
+						</div>
+						<div class="embed-stage">
+							<div class="tablet-shell">
+								<div class="tablet-screen">
+									<iframe src="https://ameerazam08-neural-network-playground.static.hf.space" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section class="embed-slide" data-transition="zoom" data-background="#082f6b">
+					<div class="space-layout">
+						<div class="space-copy">
+							<h2 class="section-title"><span class="title-icon"><i class="fas fa-eye"></i></span>CNN</h2>
+							<p class="section-lead">Las redes convolucionales aprenden filtros locales. En vez de mirar toda la imagen de una vez, detectan bordes, texturas y patrones visuales cada vez más complejos.</p>
+							<ul class="program-points">
+								<li class="fragment fade-up">Son ideales para visión por computador y reconocimiento de imágenes.</li>
+								<li class="fragment fade-up" data-fragment-index="1">Comparten filtros para detectar patrones repetidos en distintas zonas.</li>
+								<li class="fragment fade-up" data-fragment-index="2">Ayudan a conectar la IA con cámaras, diagnóstico y percepción visual.</li>
+							</ul>
+						</div>
+						<div class="embed-stage">
+							<div class="tablet-shell">
+								<div class="tablet-screen">
+									<iframe src="https://genius-society-svhn.hf.space" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section class="embed-slide" data-transition="zoom" data-background="#061c3d">
+					<div class="space-layout">
+						<div class="space-copy">
+							<h2 class="section-title"><span class="title-icon"><i class="fas fa-redo-alt"></i></span>RNN</h2>
+							<p class="section-lead">Las redes recurrentes sí incorporan secuencia: procesan un elemento tras otro y arrastran un estado interno que resume lo que ya pasó. Este ejemplo usa un LSTM para predecir la siguiente palabra.</p>
+							<ul class="program-points">
+								<li class="fragment fade-left">Sirven para series temporales, texto, audio y gestos en secuencia.</li>
+								<li class="fragment fade-left" data-fragment-index="1">Su idea central es la memoria de corto plazo: lo anterior afecta lo siguiente.</li>
+								<li class="fragment fade-left" data-fragment-index="2">Aquí se ve bien por qué fueron importantes antes del salto a Transformers.</li>
+							</ul>
+						</div>
+						<div class="embed-stage">
+							<div class="tablet-shell">
+								<div class="tablet-screen">
+									<iframe src="https://aarohanverma-lstm-next-word-predictor-demo.hf.space" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section class="embed-slide" data-transition="zoom" data-background="#082f6b">
+					<div class="space-layout">
+						<div class="space-copy">
+							<h2 class="section-title"><span class="title-icon"><i class="fas fa-share-alt"></i></span>GNN</h2>
+							<p class="section-lead">Las graph neural networks trabajan sobre nodos y relaciones. No solo importa cada dato por separado, sino también cómo está conectado con otros. Aquí uso una app de grafos para aterrizar visualmente esa lógica.</p>
+							<ul class="program-points">
+								<li class="fragment grow">Son útiles para redes sociales, fraude, conocimiento y sistemas interconectados.</li>
+								<li class="fragment grow" data-fragment-index="1">La señal se propaga entre vecinos y la estructura del grafo modifica la respuesta.</li>
+								<li class="fragment grow" data-fragment-index="2">El demo no entrena la GNN en vivo, pero sí ayuda a explicar por qué un grafo cambia la forma de aprender.</li>
+							</ul>
+						</div>
+						<div class="embed-stage">
+							<div class="tablet-shell">
+								<div class="tablet-screen">
+									<iframe src="https://agents-mcp-hackathon-graphify.hf.space" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section class="embed-slide" data-transition="zoom" data-background="#061c3d">
+					<div class="space-layout">
+						<div class="space-copy">
+							<h2 class="section-title"><span class="title-icon"><i class="fas fa-random"></i></span>GAN</h2>
+							<p class="section-lead">Las GAN enfrentan dos redes: una genera y la otra discrimina. Ese juego competitivo empuja a producir salidas cada vez más realistas.</p>
+							<ul class="program-points">
+								<li class="fragment fade-up">Una red crea ejemplos; la otra decide si parecen reales o falsos.</li>
+								<li class="fragment fade-up" data-fragment-index="1">Fue una familia clave para la generación de imágenes antes del auge de los modelos de difusión.</li>
+								<li class="fragment fade-up" data-fragment-index="2">Este demo permite mostrar lo potente y también lo delicado que es generar o alterar rostros.</li>
+							</ul>
+						</div>
+						<div class="embed-stage">
+							<div class="tablet-shell">
+								<div class="tablet-screen">
+									<iframe src="https://talhaty-faceswapper.hf.space" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section class="embed-slide utadeo-app-slide" data-transition="zoom" data-background="#082f6b">
+					<h2 class="section-title">Cómo funcionan las redes neuronales</h2>
+					<p class="section-lead">Esta visualización complementa la idea del modelo mostrando cómo las capas van transformando la información hasta producir una salida.</p>
+					<div class="embed-stage">
+						<div class="tablet-shell">
+							<div class="tablet-screen">
+								<iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTrRe7oAasHwV508diAKHI88h5AmFS6PLFBddXjgtY41UVYJdYMx09VRYg0xvbASCz1r5wE4XvEoGTe/pubembed?start=true&loop=false&delayms=3000" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section class="embed-slide" data-transition="zoom" data-background="#061c3d">
+					<h2 class="section-title">Cómo se ve un LLM por dentro</h2>
+					<p class="section-lead">Este recurso permite recorrer visualmente la arquitectura de un modelo de lenguaje grande y entender mejor tokens, capas, atención y flujo interno.</p>
+					<div class="embed-stage">
+						<div class="tablet-shell">
+							<div class="tablet-screen">
+								<iframe src="https://bbycroft.net/llm" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section class="embed-slide" data-transition="zoom" data-background="#082f6b">
+					<h2 class="section-title">Cómo se fragmenta el texto en tokens</h2>
+					<p class="section-lead">Este tokenizer permite ver cómo una frase se divide internamente antes de entrar al modelo. Es útil para entender longitud de contexto, costo y comportamiento de los LLM.</p>
+					<div class="embed-stage">
+						<div class="tablet-shell">
+							<div class="tablet-screen">
+								<iframe src="https://belladoreai.github.io/llama3-tokenizer-js/example-demo/build/" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section class="embed-slide" data-transition="zoom" data-background="#061c3d">
+					<h2 class="section-title">Cómo se genera una respuesta paso a paso</h2>
+					<p class="section-lead">Esta animación muestra de forma simple cómo un modelo de lenguaje va construyendo la salida token por token. Sirve para explicar por qué la generación es secuencial y probabilística.</p>
+					<div class="embed-stage">
+						<div class="tablet-shell">
+							<div class="tablet-screen">
+								<iframe src="https://animatedllm.github.io/generation-simple" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section class="embed-slide" data-transition="zoom" data-background="#082f6b">
+					<h2 class="section-title">Cómo se preentrena un modelo</h2>
+					<p class="section-lead">Esta visualización muestra la lógica básica del preentrenamiento: el modelo ve grandes cantidades de texto y aprende a predecir la siguiente pieza probable, ajustando sus parámetros una y otra vez.</p>
+					<div class="embed-stage">
+						<div class="tablet-shell">
+							<div class="tablet-screen">
+								<iframe src="https://animatedllm.github.io/pretraining-simple" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section data-transition="zoom" data-background="#082f6b">
+					<h2 class="section-title"><span class="title-icon"><i class="fas fa-cogs"></i></span>Base 3: el entrenamiento</h2>
+					<p class="section-lead">Entrenar es ajustar millones o miles de millones de parámetros para que el error baje y la respuesta gane consistencia.</p>
+					<div class="card-grid">
+						<div class="note-box fragment fade-up">
+							<h3>Preentrenamiento</h3>
+							<p>El modelo aprende patrones amplios a gran escala.</p>
+						</div>
+						<div class="note-box fragment fade-right" data-fragment-index="1">
+							<h3>Ajuste fino</h3>
+							<p>Se especializa en una tarea, sector o estilo de respuesta.</p>
+						</div>
+						<div class="note-box fragment fade-left" data-fragment-index="2">
+							<h3>Evaluación</h3>
+							<p>Se mide precisión, seguridad, sesgos y utilidad real.</p>
+						</div>
+						<div class="note-box fragment grow" data-fragment-index="3">
+							<h3>Retroalimentación</h3>
+							<p>Las personas corrigen, afinan y reorientan el sistema.</p>
+						</div>
+					</div>
+				</section>
+
+				<section data-transition="zoom" data-background="#061c3d">
+					<h2 class="section-title"><span class="title-icon"><i class="fas fa-terminal"></i></span>Base 4: las instrucciones</h2>
+					<p class="section-lead">Un buen prompt no es magia. Es diseño de comunicación: contexto, objetivo, formato, restricciones y criterio de calidad.</p>
+					<div class="prompt-grid">
+						<div class="prompt-box fragment fade-right">
+							<strong>Prompt débil</strong>
+							<code>Explícame la IA.</code>
+						</div>
+						<div class="prompt-box fragment fade-left" data-fragment-index="1">
+							<strong>Prompt útil</strong>
+							<code>Explícame qué es la IA para estudiantes de primer semestre, en 5 puntos, con un ejemplo cotidiano y un riesgo ético.</code>
+						</div>
+					</div>
+				</section>
+
+				<section data-transition="zoom" data-background="#061c3d">
+					<h2 class="section-title"><span class="title-icon"><i class="fas fa-pencil-ruler"></i></span>¿Cómo construir un prompt?</h2>
+					<p class="section-lead">Una forma sólida de hacerlo es seguir las recomendaciones oficiales de OpenAI: ser claro, dar contexto, pedir un formato concreto, usar ejemplos cuando ayuden e iterar sobre la respuesta.</p>
+					<div class="card-grid">
+						<div class="note-box fragment fade-up">
+							<h3>1. Define la tarea</h3>
+							<p>Di qué quieres lograr y para quién. Evita pedir “algo sobre IA” y especifica mejor el objetivo real.</p>
+						</div>
+						<div class="note-box fragment fade-up" data-fragment-index="1">
+							<h3>2. Da contexto</h3>
+							<p>Incluye audiencia, tono, nivel técnico, datos de entrada y cualquier restricción importante.</p>
+						</div>
+						<div class="note-box fragment fade-up" data-fragment-index="2">
+							<h3>3. Pide formato</h3>
+							<p>Indica si quieres tabla, lista, resumen, pasos, ejemplo, código o comparación. Eso reduce ambigüedad.</p>
+						</div>
+						<div class="note-box fragment fade-up" data-fragment-index="3">
+							<h3>4. Usa ejemplos si sirven</h3>
+							<p>Cuando la tarea es delicada o muy específica, mostrar un ejemplo de entrada o salida ayuda mucho.</p>
+						</div>
+						<div class="note-box fragment fade-up" data-fragment-index="4">
+							<h3>5. Itera y corrige</h3>
+							<p>Revisa la primera respuesta y mejora el prompt: agrega precisión, recorta ruido o ajusta el criterio de calidad.</p>
+						</div>
+						<div class="note-box fragment fade-up" data-fragment-index="5">
+							<h3>6. Evalúa el resultado</h3>
+							<p>Comprueba hechos, números, supuestos y utilidad real antes de confiar. Un prompt bueno también se prueba.</p>
+						</div>
+					</div>
+					<p class="section-lead" style="margin-top: 18px; font-size: 0.44em;">
+						Fuente: OpenAI, <a href="https://platform.openai.com/docs/guides/prompting">Prompting</a> y <a href="https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering">Best practices for prompt engineering with the OpenAI API</a>. Consultado el 18 de abril de 2026.
+					</p>
+				</section>
+
+				<section data-transition="zoom" data-background="#082f6b">
+					<h2 class="section-title"><span class="title-icon"><i class="fas fa-clipboard-check"></i></span>Calificador de prompts</h2>
+					<p class="section-lead">Este minilab evalúa tu prompt solo con base en las reglas del artículo de OpenAI: claridad, contexto, formato, ejemplos e iteración. No es un chat general; está limitado a revisar prompts.</p>
+					<div class="prompt-rater">
+						<div class="prompt-rater-form">
+							<label class="prompt-rater-label" for="prompt-rater-input">Pega aquí tu prompt</label>
+							<textarea id="prompt-rater-input" placeholder="Ejemplo: Explícame qué es una red neuronal para estudiantes de primer semestre, en 5 puntos, con un ejemplo cotidiano y un riesgo ético."></textarea>
+							<div class="prompt-rater-actions">
+								<button class="prompt-rater-button" id="prompt-rater-submit" type="button">
+									<i class="fas fa-star-half-alt"></i>
+									<span>Calificar</span>
+								</button>
+								<span class="prompt-rater-status" id="prompt-rater-status">Usa tu API key en Vercel con la variable <code>OPENAI_API_KEY</code>.</span>
+							</div>
+						</div>
+						<div class="prompt-rater-result" id="prompt-rater-result">
+							<p class="prompt-rater-placeholder">Aquí aparecerán la calificación, lo que ya hace bien el prompt y lo que le falta según la guía oficial de OpenAI.</p>
+						</div>
+					</div>
+					<p class="section-lead" style="margin-top: 16px; font-size: 0.42em;">
+						Base de evaluación: OpenAI, <a href="https://platform.openai.com/docs/guides/prompting">Prompting</a> y <a href="https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering">Best practices for prompt engineering with the OpenAI API</a>.
+					</p>
+				</section>
+
+				<section data-transition="zoom" data-background="#0a4b9c">
+					<h2 class="section-title"><span class="title-icon"><i class="fas fa-magic"></i></span>Cómo usar IA mejor</h2>
+					<p class="section-lead">La diferencia entre un uso superficial y uno potente suele estar en la iteración.</p>
+					<ul class="inline-list">
+						<li class="fragment fade-up">Define primero el resultado esperado, no solo el tema.</li>
+						<li class="fragment fade-up" data-fragment-index="1">Entrega contexto: audiencia, tono, longitud, restricciones y formato.</li>
+						<li class="fragment fade-up" data-fragment-index="2">Pide versiones: resumen, esquema, crítica, tabla, ejemplo y mejora.</li>
+						<li class="fragment fade-up" data-fragment-index="3">Verifica hechos, números, fuentes y supuestos antes de confiar.</li>
+					</ul>
+				</section>
+
+				<section class="embed-slide" data-transition="zoom" data-background="#061c3d">
+					<h2 class="section-title">Ejemplos de uso en vivo</h2>
+					<p class="section-lead">Esta página muestra tareas reales ejecutadas desde el navegador con modelos de IA. Sirve para aterrizar la conversación en experiencias concretas de texto, audio, visión y clasificación.</p>
+					<div class="embed-stage">
+						<div class="tablet-shell">
+							<div class="tablet-screen">
+								<iframe src="https://huggingface.github.io/transformers.js/#" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section data-transition="zoom" data-background="#082f6b">
+					<h2 class="section-title"><span class="title-icon"><i class="fas fa-rocket"></i></span>Aplicaciones reales del ADN de la IA</h2>
+					<div class="card-grid">
+						<div class="mini-card fragment fade-up">
+							<h3>Educación</h3>
+							<p>Tutorías, explicaciones personalizadas, guías de estudio y retroalimentación.</p>
+						</div>
+						<div class="mini-card fragment fade-up" data-fragment-index="1">
+							<h3>Industria</h3>
+							<p>Predicción de fallas, automatización documental y apoyo a decisiones operativas.</p>
+						</div>
+						<div class="mini-card fragment fade-up" data-fragment-index="2">
+							<h3>Salud</h3>
+							<p>Apoyo al análisis de imágenes, triage y priorización, nunca reemplazo automático del juicio clínico.</p>
+						</div>
+						<div class="mini-card fragment fade-up" data-fragment-index="3">
+							<h3>Creatividad</h3>
+							<p>Ideación, prototipado, escritura asistida, visualización y edición.</p>
+						</div>
+					</div>
+				</section>
+
+				<section class="embed-slide" data-transition="zoom" data-background="#082f6b">
+					<div class="device-layout">
+						<div class="device-copy">
+							<h2 class="section-title">Ejemplo aplicado en la Utadeo</h2>
+							<p class="section-lead">Este sitio muestra una aplicación concreta del ecosistema de IA en la universidad y sirve para conectar el taller con un caso cercano y real.</p>
+							<a class="device-link" href="https://ingenioutadeo.lat/" target="_blank" rel="noopener noreferrer">
+								<i class="fas fa-external-link-alt"></i>
+								<span>Ir a Ingenio</span>
+							</a>
+						</div>
+						<div class="device-stage">
+							<div class="device-shell" aria-label="Vista tipo dispositivo de Ingenio Utadeo">
+								<div class="device-screen">
+									<iframe src="https://ingenioutadeo.lat/" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section data-transition="zoom" data-background="#0a3a74">
+					<h2 class="section-title"><span class="title-icon"><i class="fas fa-exclamation-triangle"></i></span>Riesgos: cuando el ADN viene defectuoso</h2>
+					<p class="section-lead">La IA amplifica tanto lo bueno como lo malo del sistema que la alimenta.</p>
+					<div class="flow-line">
+						<div class="flow-step fragment fade-right">
+							<strong>Sesgos</strong>
+							<span>Los datos arrastran prejuicios históricos y sociales.</span>
+						</div>
+						<div class="flow-step fragment fade-right" data-fragment-index="1">
+							<strong>Alucinaciones</strong>
+							<span>El modelo puede sonar convincente y aun así estar equivocado.</span>
+						</div>
+						<div class="flow-step fragment fade-right" data-fragment-index="2">
+							<strong>Opacidad</strong>
+							<span>No siempre es fácil explicar por qué respondió eso.</span>
+						</div>
+						<div class="flow-step fragment fade-right" data-fragment-index="3">
+							<strong>Dependencia</strong>
+							<span>Usarla sin criterio debilita el análisis propio.</span>
+						</div>
+					</div>
+				</section>
+
+				<section class="centered-slide" data-transition="slide" data-background="#082f6b">
+					<h2 class="section-title fragment fade-up"><span class="title-icon"><i class="fas fa-lightbulb"></i></span>Idea final</h2>
+					<p class="final-quote fragment fade-up" data-fragment-index="1">La IA no tiene magia en su centro. Tiene estructura. Entender su ADN es lo que permite usarla con más creatividad, más precisión y más responsabilidad.</p>
+					<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Jorge_Tadeo_Lozano_University_logo.svg/1280px-Jorge_Tadeo_Lozano_University_logo.svg.png" alt="logo Utadeo" style="height: 160px; margin: 36px auto 0; background: transparent;" class="demo-logo fragment fade-up" data-fragment-index="2">
 				</section>
 				
+			</div>
+		</div>
+		<div class="infographic-modal" id="infographic-modal" aria-hidden="true">
+			<div class="infographic-modal-card" role="dialog" aria-modal="true" aria-label="Infografía Domo ampliada">
+				<button class="infographic-close" type="button" aria-label="Cerrar infografía ampliada" data-close-infographic>&times;</button>
+				<img class="infographic-modal-image" src="domo-ai-edition-2025.avif" alt="Infografía Domo sobre IA 2025 ampliada">
 			</div>
 		</div>
 
 
 		<script src="dist/reveal.js"></script>
-		<script src="plugin/notes/notes.js"></script>
-		<script src="plugin/markdown/markdown.js"></script>
-		<script src="plugin/highlight/highlight.js"></script>
-       <script src="plugin/chalkboard/plugin.js"></script>
-	   <script src="plugin/customcontrols/plugin.js"></script>
-	   <script src="plugin/math/math.js"></script>
-	   <script src="plugin/embed-tweet/plugin.js"></script>
-	   <script src="https://unpkg.com/gojs/release/go-debug.js"></script>
-	   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.min.js"></script>
-		<script src="plugin/chart/plugin.js"></script>
+		<script src="plugin/chalkboard/plugin.js"></script>
+		<script src="plugin/customcontrols/plugin.js"></script>
 		<script src="plugin/embed-tweet/plugin.js"></script>
-		<script type="text/javascript" src="https://www.tecnivoro.com/wp-includes/js/wp-embed.min.js?ver=5.8.1" id="wp-embed-js"></script>
-		<script src="https://balkan.app/js/OrgChart.js"></script>
-
-</script>
-	   
-		
 		
 		<script>
-			// More info about initialization & config:
-			// - https://revealjs.com/initialization/
-			// - https://revealjs.com/config/
 			Reveal.initialize({
-				chart: {
-		defaults: {
-			color: 'black', // color of labels
-			scale: {
-				beginAtZero: true,
-				ticks: { stepSize: 1 },
-				grid: { color: "lightgray" } , // color of grid lines
-			},
-		},
-		line: { borderColor: [ "rgba(20,220,220,.8)" , "rgba(220,120,120,.8)", "rgba(20,120,220,.8)" ], "borderDash": [ [5,10], [0,0] ] },
-		bar: { backgroundColor: [ "rgba(20,220,220,.8)" , "rgba(220,120,120,.8)", "rgba(20,120,220,.8)" ]},
-		pie: { backgroundColor: [ ["#A4036F" , "#048BA8", "#16DB93", "#EFEA5A", "#F29E4C"] ]},
-	},
-
-
-
-
-
 				controls: false,
-				hash: true,slideNumber: 'c/t',
+				hash: true,
+				slideNumber: 'c/t',
 				customcontrols: {
-		slideNumberCSS : 'position: fixed; display: block; right: 90px; top: auto; left: auto; width: 50px; bottom: 30px; z-index: 31; font-family: Helvetica, sans-serif; font-size:  12px; line-height: 1; padding: 5px; text-align: center; border-radius: 10px; background-color: rgba(128,128,128,.5)',
-		controls: [
-			{ icon: '<i class="fa fa-caret-left"></i>',
-			  css: 'position: fixed; right: 60px; bottom: 30px; z-index: 30; font-size: 24px;',
-			  action: 'Reveal.prev(); return false;'
-			},
-			{ icon: '<i class="fa fa-caret-right"></i>',
-			  css: 'position: fixed; right: 30px; bottom: 30px; z-index: 30; font-size: 24px;',
-			  action: 'Reveal.next(); return false;'
-			}
-		]
-	},	math: {
-      mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',
-      config: 'TeX-AMS_HTML-full',
-      // pass other options into `MathJax.Hub.Config()`
-      TeX: { Macros: { RR: "{\\bf R}" } }
-    },
-
-				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMath, RevealMarkdown, RevealHighlight, RevealNotes, RevealChalkboard,RevealCustomControls,RevealChart,RevealEmbedTweet   ]
+					slideNumberCSS: 'position: fixed; display: block; right: 90px; top: auto; left: auto; width: 50px; bottom: 30px; z-index: 31; font-family: Helvetica, sans-serif; font-size: 12px; line-height: 1; padding: 5px; text-align: center; border-radius: 10px; background-color: rgba(128,128,128,.5)',
+					controls: [
+						{
+							icon: '<i class="fa fa-caret-left"></i>',
+							css: 'position: fixed; right: 60px; bottom: 30px; z-index: 30; font-size: 24px;',
+							action: 'Reveal.prev(); return false;'
+						},
+						{
+							icon: '<i class="fa fa-caret-right"></i>',
+							css: 'position: fixed; right: 30px; bottom: 30px; z-index: 30; font-size: 24px;',
+							action: 'Reveal.next(); return false;'
+						}
+					]
+				},
+				plugins: [ RevealChalkboard, RevealCustomControls, RevealEmbedTweet ]
 			});
 			
 			Reveal.configure({ pdfMaxPagesPerSlide: 1 });
 			Reveal.configure({ pdfSeparateFragments: false });
-			var $ = go.GraphObject.make;
 
-	   </script>
-<script>
+			function buildDNA(containerId, phaseOffset) {
+				const container = document.getElementById(containerId);
+				if (!container) return;
+				const total = 28;
 
-OrgChart.templates.ula.field_0 = '<text width="145" style="font-size: 18px;" fill="#039BE5" x="100" y="25">{val}</text>';
-OrgChart.templates.ula.field_1 ='<text data-width="145" data-text-overflow="multiline" style="font-size: 14px;" fill="#afafaf" x="100" y="45">{val}</text>';
-OrgChart.templates.ula.field_2 ='<text data-width="145" data-text-overflow="multiline" style="font-size: 10px;" fill="#003865" x="90" y="100">{val}</text>';
-OrgChart.templates.polina.field_0 = '<text data-width="200" data-text-overflow="multiline" style="font-size: 16px;" fill="#ffffff" x="80" y="20" text-anchor="start">{val}</text>';
-OrgChart.templates.polina.field_2 = '<text data-width="210" data-text-overflow="multiline" style="font-size: 10px;" fill="#ffffff" x="80" y="55" text-anchor="start">{val}</text>';
+				for (let i = 0; i < total; i += 1) {
+					const rung = document.createElement('div');
+					rung.className = 'dna-rung';
 
-var chart = new OrgChart(document.getElementById("tree"), {
-			template: "ula",		
-			orientation: OrgChart.orientation.left,
-    		assistantSeparation: 20,        
-			enableSearch: false,
-            mouseScrool: OrgChart.action.none,
-			tags: {
-                "Management": {
-                    template: "rony"
-                },
-                "PREGRADO": {
-                    template: "polina"
-                },
-                "POSGRADO": {
-                    template: "polina"
-                },
-                "FCNI": {
-                    template: "ula"
-                },
-                "AITD": {
-                    template: "belinda"
-                }
-            },
-			nodeBinding: {
-                field_0: "name",
-                field_1: "title",
-				field_2: "email",
-				img_0: "img" 
-            },
-            nodes: [
-                { id: 1, tags: ["FCNI"],email:"ciencias.naturales@utadeo.edu.co",name: "Isaac Dyner", title: "Facultad de Ciencias Naturales e Ingeniería", img: "https://www.utadeo.edu.co/sites/tadeo/files/node/wysiwyg/isaac-dyner-fcne-utadeo.2_0.jpg" },
-                { id: 2, pid: 1, tags: ["FCNI"],name: "Luis Arias ",email:"luis.arias@utadeo.edu.co", title: "Área Académica Ciencias Biológicas y Ambientales", img: "https://www.utadeo.edu.co/sites/tadeo/files/styles/img_perfil_150x180/public/person/officials/field_image_profile/nota_luis_alejandro_arias_1_1.jpg?itok=fQ7A-cW9"},
-                { id: 3, pid: 1, tags: ["FCNI"], name: "Edgar Ruíz", title:"Área Académica Industrias y Tecnologías Digitales", email:"edgar.ruiz@utadeo.edu.co", img: "https://www.utadeo.edu.co/sites/tadeo/files/styles/img_perfil_150x180/public/person/officials/field_image_profile/nota_edgar_jose_ruiz_dorantes_0_0.jpg?itok=uQuhyLa0" },
-				{ id: 6, pid: 1, tags: ["FCNI"], name: "Favio Cala", title:"Área Académica Ciencias Básicas y Modelado", email:"favio.cala@utadeo.edu.co", img: "https://www.utadeo.edu.co/sites/tadeo/files/styles/img_perfil_150x180/public/person/officials/field_image/favio_0.jpg?itok=pUdOUd9m" },
-				{ id: 4, pid: 1, tags: ["assistant"], email:"centro.biosistemas@utadeo.edu.co",name: "Luz Stella Fuentes", title: "Centro de BIOSISTEMAS", img: "https://www.utadeo.edu.co/sites/tadeo/files/styles/internal_517x290/public/node/news/field_images/luz.estella.fuente.png?itok=uv_TR0fu" },
-				{ id: 5, pid: 1, tags: ["FCNI"], name: "Alis Pataquiva", title:"Área Académica Procesos y Productos Sostenibles", email:"alisy.pataquivam@utadeo.edu.co", img: "https://www.utadeo.edu.co/sites/tadeo/files/styles/img_perfil_150x180/public/person/officials/field_image_profile/aypm.png?itok=bmuGQ6-6" },
-				{ id: 7, pid: 3, tags: ["PREGRADO"], name: "Ingeniería en Automatizacion",  email:"ingenieria.sistemas@utadeo.edu.co",img:"data:image/jpeg;base64,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" },
-				{ id: 8, pid: 3, tags: ["PREGRADO"], name: "Ingeniería de Sistemas",  email:"ingenieria.sistemas@utadeo.edu.co",img:"https://www.utadeo.edu.co/sites/tadeo/files/node/wysiwyg/whatsapp_image_2021-06-29_at_10.32.08_2.jpeg" },
-				{ id: 9, pid: 3, tags: ["PREGRADO"], name: "Ingeniería Industrial",  email:"ingenieria.industrial@utadeo.edu.co",img:"data:image/jpeg;base64,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" },
-				{ id: 10, pid: 3, tags: ["POSGRADO"], name: "Especialización en Desarrollo de Bases de Datos",  email:"edbd@utadeo.edu.co",img:"https://www.utadeo.edu.co/sites/tadeo/files/node/wysiwyg/especializacion-base-de-datos-bogota.jpg" },
-				{ id: 11, pid: 3, tags: ["POSGRADO"], name: "Maestría en Ingeniería y Analítica de Datos",  email:"miad@utadeo.edu.co",img:"https://www.utadeo.edu.co/sites/tadeo/files/node/wysiwyg/maestria-ingenieria-analitica-datos.jpg" },
-				{ id: 12, pid: 3, tags: ["POSGRADO"], name: "Maestría en Ingeniería - Gestión Sostenible de la Energía",img:"https://www.utadeo.edu.co/sites/tadeo/files/node/wysiwyg/maestria_en_ingenieria_-_gestion_sostenible_de_la_energia.jpg" },
-				{ id: 13, pid: 3, tags: ["POSGRADO"], name: "Maestría en Ingeniería de la Gestión",  email:"maestria.gestion@utadeo.edu.co",img:"https://www.utadeo.edu.co/sites/tadeo/files/node/wysiwyg/maestria_en_ingenieria_de_procesos_y_sistemas_industriales.jpg" },
+					const progress = i / (total - 1);
+					const angle = progress * Math.PI * 4 + phaseOffset;
+					const offsetX = Math.sin(angle) * 58;
+					const scaleY = 0.75 + (Math.cos(angle) + 1) * 0.18;
 
-            ]
-			   
-        });    
+					rung.style.top = `${progress * 100}%`;
+					rung.style.setProperty('--shift', `${offsetX}px`);
+					rung.style.setProperty('--scale', `${scaleY}`);
+					rung.style.animationDelay = `${i * -0.24}s`;
 
-</script>		
+					const link = document.createElement('span');
+					link.className = 'dna-link';
+					link.style.transform = `rotate(${Math.sin(angle) * 18}deg) scaleX(${0.8 + (Math.cos(angle) + 1) * 0.12})`;
+
+					rung.appendChild(link);
+					container.appendChild(rung);
+				}
+			}
+
+			buildDNA('dna-left', 0);
+			buildDNA('dna-right', Math.PI / 2);
+
+			document.querySelectorAll('a[href^="http"]').forEach((link) => {
+				link.setAttribute('target', '_blank');
+				link.setAttribute('rel', 'noopener noreferrer');
+			});
+
+			const titleSelectors = [
+				'.hero-title',
+				'.section-title',
+				'.presenter-name'
+			];
+
+			const subtitleSelectors = [
+				'.hero-presenter',
+				'.hero-subtitle',
+				'.section-lead',
+				'.presenter-role'
+			];
+
+			document.querySelectorAll('.slides section').forEach((section) => {
+				section.querySelectorAll('.fragment').forEach((fragment) => {
+					fragment.classList.remove('fade-right', 'fade-left', 'grow');
+					fragment.classList.add('fade-up');
+					fragment.removeAttribute('data-fragment-index');
+				});
+
+				const titles = titleSelectors
+					.map((selector) => section.querySelector(selector))
+					.filter(Boolean);
+
+				const subtitles = subtitleSelectors
+					.map((selector) => section.querySelector(selector))
+					.filter(Boolean)
+					.filter((node) => !titles.includes(node));
+
+				titles.forEach((node) => {
+					node.classList.add('fragment', 'fade-up');
+					node.setAttribute('data-fragment-index', '0');
+				});
+
+				subtitles.forEach((node) => {
+					node.classList.add('fragment', 'fade-up');
+					node.setAttribute('data-fragment-index', '1');
+				});
+
+				section.querySelectorAll('.fragment').forEach((fragment) => {
+					if (!titles.includes(fragment) && !subtitles.includes(fragment)) {
+						fragment.setAttribute('data-fragment-index', '2');
+					}
+				});
+			});
+
+			const promptRaterInput = document.getElementById('prompt-rater-input');
+			const promptRaterSubmit = document.getElementById('prompt-rater-submit');
+			const promptRaterStatus = document.getElementById('prompt-rater-status');
+			const promptRaterResult = document.getElementById('prompt-rater-result');
+
+			function escapeHtml(text) {
+				return String(text)
+					.replaceAll('&', '&amp;')
+					.replaceAll('<', '&lt;')
+					.replaceAll('>', '&gt;')
+					.replaceAll('"', '&quot;')
+					.replaceAll("'", '&#39;');
+			}
+
+			function renderPromptResult(payload) {
+				const strengths = (payload.strengths || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+				const missing = (payload.missing || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+				const suggestions = (payload.suggestions || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+				const improvedPrompt = payload.improved_prompt ? `<h3>Versión sugerida</h3><code>${escapeHtml(payload.improved_prompt)}</code>` : '';
+
+				promptRaterResult.innerHTML = `
+					<div class="prompt-score">
+						<strong>${escapeHtml(payload.score ?? '-')} / 10</strong>
+						<span>${escapeHtml(payload.verdict || 'Evaluación')}</span>
+					</div>
+					<p>${escapeHtml(payload.summary || '')}</p>
+					<h3>Lo que ya hace bien</h3>
+					<ul>${strengths || '<li>No se detectaron fortalezas claras todavía.</li>'}</ul>
+					<h3>Lo que le falta</h3>
+					<ul>${missing || '<li>No se detectaron vacíos importantes.</li>'}</ul>
+					<h3>Cómo mejorarlo</h3>
+					<ul>${suggestions || '<li>No hay sugerencias adicionales.</li>'}</ul>
+					${improvedPrompt}
+				`;
+			}
+
+			if (promptRaterSubmit && promptRaterInput && promptRaterResult && promptRaterStatus) {
+				promptRaterSubmit.addEventListener('click', async () => {
+					const promptText = promptRaterInput.value.trim();
+
+					if (!promptText) {
+						promptRaterStatus.textContent = 'Pega primero un prompt para poder evaluarlo.';
+						return;
+					}
+
+					promptRaterSubmit.disabled = true;
+					promptRaterStatus.textContent = 'Calificando prompt...';
+					promptRaterResult.innerHTML = '<p class="prompt-rater-placeholder">Analizando claridad, contexto, formato, ejemplos e iteración...</p>';
+
+					try {
+						const response = await fetch('/api/score-prompt', {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/json' },
+							body: JSON.stringify({ prompt: promptText })
+						});
+
+						const data = await response.json();
+
+						if (!response.ok) {
+							throw new Error(data.error || 'No se pudo calificar el prompt.');
+						}
+
+						renderPromptResult(data);
+						promptRaterStatus.textContent = 'Listo. La evaluación se basó solo en las reglas de prompting seleccionadas.';
+					} catch (error) {
+						promptRaterStatus.textContent = error.message || 'No se pudo completar la evaluación.';
+						promptRaterResult.innerHTML = '<p class="prompt-rater-placeholder">No se pudo obtener una evaluación. Verifica que la variable OPENAI_API_KEY exista en Vercel.</p>';
+					} finally {
+						promptRaterSubmit.disabled = false;
+					}
+				});
+			}
+
+			const infographicModal = document.getElementById('infographic-modal');
+			const openInfographicBtn = document.querySelector('[data-open-infographic]');
+			const closeInfographicBtn = document.querySelector('[data-close-infographic]');
+
+			function openInfographic() {
+				if (!infographicModal) return;
+				infographicModal.classList.add('is-open');
+				infographicModal.setAttribute('aria-hidden', 'false');
+			}
+
+			function closeInfographic() {
+				if (!infographicModal) return;
+				infographicModal.classList.remove('is-open');
+				infographicModal.setAttribute('aria-hidden', 'true');
+			}
+
+			if (openInfographicBtn) {
+				openInfographicBtn.addEventListener('click', openInfographic);
+			}
+
+			if (closeInfographicBtn) {
+				closeInfographicBtn.addEventListener('click', closeInfographic);
+			}
+
+			if (infographicModal) {
+				infographicModal.addEventListener('click', (event) => {
+					if (event.target === infographicModal) {
+						closeInfographic();
+					}
+				});
+			}
+
+			document.addEventListener('keydown', (event) => {
+				if (event.key === 'Escape') {
+					closeInfographic();
+				}
+			});
+		</script>
 
 			
 	</body>
