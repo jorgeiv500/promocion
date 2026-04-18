@@ -2458,6 +2458,16 @@
 				promptRaterHealthChecked = true;
 
 				try {
+					const healthResponse = await fetch('/api/health', {
+						method: 'GET',
+						headers: { 'Accept': 'application/json' }
+					});
+					const healthData = await parseJsonResponse(healthResponse);
+
+					if (!healthResponse.ok || !healthData.ok) {
+						throw new Error('Vercel no está sirviendo correctamente las funciones API.');
+					}
+
 					const response = await fetch('/api/score-prompt', {
 						method: 'GET',
 						headers: { 'Accept': 'application/json' }

@@ -1,0 +1,9 @@
+{
+  "name": "promocion",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Presentacion Reveal.js desplegable en Vercel con funciones serverless.",
+  "engines": {
+    "node": "20.x"
+  }
+}

@@ -1,5 +1,8 @@
 {
   "functions": {
+    "api/health.js": {
+      "runtime": "nodejs20.x"
+    },
     "api/score-prompt.js": {
       "runtime": "nodejs20.x"
     }
