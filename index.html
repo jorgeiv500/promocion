@@ -823,11 +823,13 @@
 			  display: flex;
 			  justify-content: center;
 			  margin-top: 18px;
+			  min-width: 0;
 			}
 
 			.tablet-shell {
 			  position: relative;
-			  width: min(1040px, 92vw);
+			  width: 100%;
+			  max-width: min(1040px, 92vw);
 			  padding: 20px 18px;
 			  border-radius: 30px;
 			  background: linear-gradient(180deg, #2a4368 0%, #16253d 100%);
@@ -938,6 +940,7 @@
 			  display: flex;
 			  flex-direction: column;
 			  justify-content: center;
+			  min-width: 0;
 			}
 
 			.space-copy .section-title {
@@ -968,7 +971,8 @@
 			}
 
 			.mediapipe-shell {
-			  width: min(1040px, 92vw);
+			  width: 100%;
+			  max-width: min(1040px, 92vw);
 			}
 
 			.mediapipe-screen {
@@ -976,6 +980,42 @@
 			  aspect-ratio: 16 / 10;
 			  min-height: 420px;
 			  background: radial-gradient(circle at top, rgba(31, 73, 138, 0.5), #07162d 68%);
+			}
+
+			.mediapipe-slide .space-head {
+			  max-width: 1240px;
+			  margin: 0 auto 18px;
+			}
+
+			.mediapipe-slide .space-head .section-title {
+			  max-width: 900px;
+			  margin-top: 0;
+			  margin-bottom: 12px;
+			}
+
+			.mediapipe-slide .space-head .section-lead {
+			  max-width: 980px;
+			  margin-bottom: 0;
+			}
+
+			.mediapipe-layout {
+			  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+			  align-items: start;
+			  gap: 26px;
+			  min-height: 0;
+			}
+
+			.mediapipe-layout .space-copy {
+			  justify-content: flex-start;
+			  padding-top: 4px;
+			}
+
+			.mediapipe-layout .program-points {
+			  margin-top: 0;
+			}
+
+			.mediapipe-layout .embed-stage {
+			  justify-content: flex-end;
 			}
 
 			.mediapipe-video,
@@ -1524,6 +1564,14 @@
 			    min-height: 0;
 			  }
 
+			  .mediapipe-slide .space-head {
+			    margin-bottom: 14px;
+			  }
+
+			  .mediapipe-layout {
+			    grid-template-columns: 1fr;
+			  }
+
 			  .prompt-rater {
 			    grid-template-columns: 1fr;
 			  }
@@ -1923,10 +1971,12 @@
 				</section>
 
 				<section class="embed-slide mediapipe-slide" data-transition="zoom" data-background="#082f6b">
-					<div class="space-layout">
+					<div class="space-head">
+						<h2 class="section-title"><span class="title-icon"><i class="fas fa-face-smile"></i></span>Otros modelos: percepción en tiempo real</h2>
+						<p class="section-lead">No todo pasa por LLM, CNN o RNN. También existen modelos ligeros para seguimiento facial, manos, postura y objetos. Este ejemplo usa <strong>MediaPipe Face Mesh</strong>, un modelo de detección de landmarks faciales que estima cientos de puntos sobre el rostro en tiempo real.</p>
+					</div>
+					<div class="space-layout mediapipe-layout">
 						<div class="space-copy">
-							<h2 class="section-title"><span class="title-icon"><i class="fas fa-face-smile"></i></span>Otros modelos: percepción en tiempo real</h2>
-							<p class="section-lead">No todo pasa por LLM, CNN o RNN. También existen modelos ligeros para seguimiento facial, manos, postura y objetos. Este ejemplo usa <strong>MediaPipe Face Mesh</strong>, un modelo de detección de landmarks faciales que estima cientos de puntos sobre el rostro en tiempo real.</p>
 							<ul class="program-points">
 								<li class="fragment fade-up">No genera texto: detecta geometría facial y movimiento directamente desde video.</li>
 								<li class="fragment fade-up" data-fragment-index="1">Sirve para filtros, interacción humano-computador, seguimiento visual y realidad aumentada.</li>
