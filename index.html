@@ -2392,18 +2392,18 @@
 					.filter((node) => !titles.includes(node));
 
 				titles.forEach((node) => {
-					node.classList.add('fragment', 'fade-up');
-					node.setAttribute('data-fragment-index', '0');
+					node.classList.remove('fragment', 'fade-up', 'visible', 'current-fragment');
+					node.removeAttribute('data-fragment-index');
 				});
 
 				subtitles.forEach((node) => {
 					node.classList.add('fragment', 'fade-up');
-					node.setAttribute('data-fragment-index', '1');
+					node.setAttribute('data-fragment-index', '0');
 				});
 
 				section.querySelectorAll('.fragment').forEach((fragment) => {
 					if (!titles.includes(fragment) && !subtitles.includes(fragment)) {
-						fragment.setAttribute('data-fragment-index', '2');
+						fragment.setAttribute('data-fragment-index', '1');
 					}
 				});
 			});
