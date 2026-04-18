@@ -689,31 +689,80 @@
 			}
 
 			.prompt-score {
-			  display: flex;
-			  align-items: baseline;
-			  gap: 10px;
-			  margin-bottom: 14px;
+			  display: grid;
+			  grid-template-columns: auto minmax(0, 1fr);
+			  align-items: start;
+			  gap: 16px;
+			  margin-bottom: 0;
 			}
 
-			.prompt-score strong {
-			  font-size: 1.2em;
+			.prompt-score-number {
+			  font-size: 1.04em;
+			  line-height: 0.92;
+			  font-weight: 800;
 			  color: #ffffff;
 			}
 
-			.prompt-score span {
+			.prompt-score-number span {
+			  display: block;
+			  margin-top: 6px;
+			  font-size: 0.48em;
+			  color: var(--blue-300);
+			  letter-spacing: 0.02em;
+			}
+
+			.prompt-score-meta {
+			  min-width: 0;
+			  padding-top: 4px;
+			}
+
+			.prompt-score-label {
+			  display: block;
+			  margin-bottom: 6px;
+			  color: var(--blue-300);
+			  font-size: 0.38em;
+			  letter-spacing: 0.06em;
+			  text-transform: uppercase;
+			}
+
+			.prompt-score-verdict {
 			  color: var(--utadeo-yellow);
-			  font-size: 0.5em;
+			  font-size: 0.42em;
+			  line-height: 1.24;
 			  text-transform: uppercase;
 			  letter-spacing: 0.05em;
 			}
 
-			.prompt-rater-result h3 {
-			  margin: 16px 0 8px;
-			  font-size: 0.5em;
-			  color: var(--blue-100);
+			.prompt-rater-summary {
+			  margin: 0;
+			  font-size: 0.48em;
+			  line-height: 1.42;
+			  color: var(--ink-soft);
 			}
 
-			.prompt-rater-result p,
+			.prompt-result-grid {
+			  display: grid;
+			  grid-template-columns: 1fr;
+			  gap: 12px;
+			}
+
+			.prompt-result-block {
+			  padding: 12px 14px;
+			  border-radius: 14px;
+			  background: rgba(255, 255, 255, 0.05);
+			  border: 1px solid rgba(255,255,255,0.08);
+			}
+
+			.prompt-result-title {
+			  margin: 0 0 8px;
+			  color: var(--blue-100);
+			  font-size: 0.36em;
+			  line-height: 1.2;
+			  letter-spacing: 0.04em;
+			  text-transform: uppercase;
+			  font-weight: 700;
+			}
+
 			.prompt-rater-result li {
 			  font-size: 0.48em;
 			  line-height: 1.45;
@@ -725,9 +774,12 @@
 			  padding-left: 18px;
 			}
 
+			.prompt-rater-result li + li {
+			  margin-top: 6px;
+			}
+
 			.prompt-rater-result code {
 			  display: block;
-			  margin-top: 10px;
 			  white-space: pre-wrap;
 			  font-size: 0.42em;
 			  line-height: 1.45;
@@ -736,6 +788,10 @@
 			  border: 1px solid rgba(255,255,255,0.08);
 			  border-radius: 12px;
 			  padding: 12px;
+			}
+
+			.prompt-result-block.prompt-result-improved code {
+			  margin-top: 0;
 			}
 
 			.reveal .slides section.prompt-rater-slide {
@@ -2483,20 +2539,36 @@
 				const strengths = (payload.strengths || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('');
 				const missing = (payload.missing || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('');
 				const suggestions = (payload.suggestions || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('');
-				const improvedPrompt = payload.improved_prompt ? `<h3>Versión sugerida</h3><code>${escapeHtml(payload.improved_prompt)}</code>` : '';
+				const improvedPrompt = payload.improved_prompt ? `
+					<div class="prompt-result-block prompt-result-improved">
+						<div class="prompt-result-title">Versión sugerida</div>
+						<code>${escapeHtml(payload.improved_prompt)}</code>
+					</div>
+				` : '';
 
 				promptRaterResult.innerHTML = `
 					<div class="prompt-score">
-						<strong>${escapeHtml(payload.score ?? '-')} / 10</strong>
-						<span>${escapeHtml(payload.verdict || 'Evaluación')}</span>
+						<div class="prompt-score-number">${escapeHtml(payload.score ?? '-')}<span>/ 10</span></div>
+						<div class="prompt-score-meta">
+							<span class="prompt-score-label">Evaluación</span>
+							<div class="prompt-score-verdict">${escapeHtml(payload.verdict || 'Evaluación del prompt')}</div>
+						</div>
 					</div>
-					<p>${escapeHtml(payload.summary || '')}</p>
-					<h3>Lo que ya hace bien</h3>
-					<ul>${strengths || '<li>No se detectaron fortalezas claras todavía.</li>'}</ul>
-					<h3>Lo que le falta</h3>
-					<ul>${missing || '<li>No se detectaron vacíos importantes.</li>'}</ul>
-					<h3>Cómo mejorarlo</h3>
-					<ul>${suggestions || '<li>No hay sugerencias adicionales.</li>'}</ul>
+					<p class="prompt-rater-summary">${escapeHtml(payload.summary || '')}</p>
+					<div class="prompt-result-grid">
+						<div class="prompt-result-block">
+							<div class="prompt-result-title">Lo que ya hace bien</div>
+							<ul>${strengths || '<li>No se detectaron fortalezas claras todavía.</li>'}</ul>
+						</div>
+						<div class="prompt-result-block">
+							<div class="prompt-result-title">Lo que le falta</div>
+							<ul>${missing || '<li>No se detectaron vacíos importantes.</li>'}</ul>
+						</div>
+						<div class="prompt-result-block">
+							<div class="prompt-result-title">Cómo mejorarlo</div>
+							<ul>${suggestions || '<li>No hay sugerencias adicionales.</li>'}</ul>
+						</div>
+					</div>
 					${improvedPrompt}
 				`;
 			}
