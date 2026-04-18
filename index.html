@@ -984,6 +984,41 @@
 			  justify-content: flex-end;
 			}
 
+			.demo-link-panel {
+			  display: flex;
+			  flex-direction: column;
+			  align-items: flex-start;
+			  justify-content: center;
+			  min-height: 360px;
+			  gap: 14px;
+			  width: 100%;
+			  max-width: 560px;
+			  text-align: left;
+			}
+
+			.demo-link-icon {
+			  display: inline-flex;
+			  align-items: center;
+			  justify-content: center;
+			  width: 58px;
+			  height: 58px;
+			  border-radius: 16px;
+			  background: rgba(242, 194, 79, 0.12);
+			  border: 1px solid rgba(242, 194, 79, 0.26);
+			  color: var(--utadeo-yellow);
+			  font-size: 0.78em;
+			}
+
+			.demo-link-panel h3 {
+			  margin: 0;
+			  padding-left: 0;
+			}
+
+			.demo-link-panel p {
+			  margin: 0;
+			  max-width: 34ch;
+			}
+
 			.space-layout {
 			  display: grid;
 			  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
@@ -1975,10 +2010,14 @@
 							</ul>
 						</div>
 						<div class="embed-stage">
-							<div class="tablet-shell">
-								<div class="tablet-screen">
-									<iframe src="https://ameerazam08-neural-network-playground.static.hf.space" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
-								</div>
+							<div class="frame-panel demo-link-panel">
+								<div class="demo-link-icon"><i class="fas fa-up-right-from-square"></i></div>
+								<h3>Ábrelo fuera del deck</h3>
+								<p>Este demo se entiende mejor en pantalla completa para mover parámetros, entradas y frontera de decisión sin que la interfaz se comprima.</p>
+								<a class="device-link" href="https://ameerazam08-neural-network-playground.static.hf.space" target="_blank" rel="noopener noreferrer">
+									<i class="fas fa-arrow-up-right-from-square"></i>
+									<span>Abrir demo</span>
+								</a>
 							</div>
 						</div>
 					</div>
