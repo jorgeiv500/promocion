@@ -5,3 +5,4 @@
 .env.test.local
 
 .DS_Store
+.vercel
